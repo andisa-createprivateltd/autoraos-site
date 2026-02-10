@@ -113,10 +113,11 @@ export async function uploadBookingExcelToDrive(
 
 /**
  * Sanitize folder name for Google Drive queries
- * Escapes single quotes to prevent query syntax errors
+ * Escapes special characters to prevent query syntax errors
  */
 function sanitizeFolderName(name: string): string {
-  return name.replace(/'/g, "\\'");
+  // Escape backslashes first, then single quotes
+  return name.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
 }
 
 /**
