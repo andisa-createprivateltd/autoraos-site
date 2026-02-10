@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { bookingSchema } from "@/lib/validation";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { createAuditInvite } from "@/lib/calendar";
-import { sendBookingEmails } from "@/lib/email";
+import { sendBookingEmails, sendSimpleBookingEmail } from "@/lib/email";
 import { getSupabaseClient } from "@/lib/supabase";
 import { loadAvailabilityWindows, isSlotWithinAvailability } from "@/lib/scheduling";
 import { waLink } from "@/lib/utils";
@@ -15,15 +15,6 @@ import {
 } from "@/lib/beta-capture";
 
 export async function POST(request: Request) {
-  // Early check for required configuration
-  if (!hasSupabase()) {
-    console.error("Booking API called but Supabase is not configured");
-    return NextResponse.json(
-      { message: "Booking system is not configured. Please contact support." },
-      { status: 503 }
-    );
-  }
-
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const userAgent = request.headers.get("user-agent") || "unknown";
   const limit = checkRateLimit(`booking:${ip}:${userAgent.slice(0, 50)}`);
@@ -60,6 +51,59 @@ export async function POST(request: Request) {
     return NextResponse.json({ message: "Choose a future slot at least 10 minutes from now." }, { status: 400 });
   }
 
+  // Check if database is available
+  const databaseAvailable = hasSupabase();
+  
+  if (!databaseAvailable) {
+    // FALLBACK MODE: Email-only booking (no database)
+    console.warn("Booking submitted but database not configured - using email-only mode");
+    
+    try {
+      await sendSimpleBookingEmail({
+        dealershipName: input.dealershipName,
+        brand: input.brand,
+        contactPerson: input.contactPerson,
+        phone: input.phone,
+        email: input.email,
+        province: input.province,
+        city: input.city,
+        preferredDateTime: input.preferredDateTime,
+        notes: input.notes,
+        source: input.source
+      });
+
+      const whatsappConfirmationUrl = waLink(
+        input.phone,
+        `Hi ${input.contactPerson}, your booking request for ${input.dealershipName} has been received. We'll contact you shortly to confirm your 15-minute Dealer Lead Audit on ${new Date(
+          input.preferredDateTime
+        ).toLocaleString("en-ZA", {
+          dateStyle: "full",
+          timeStyle: "short"
+        })}.`
+      );
+
+      return NextResponse.json({
+        success: true,
+        bookingId: "email-" + Date.now(),
+        message: "Booking request received. We'll confirm shortly via email.",
+        booking: {
+          dealershipName: input.dealershipName,
+          brand: input.brand,
+          contactPerson: input.contactPerson,
+          preferredDateTime: input.preferredDateTime
+        },
+        whatsappConfirmationUrl
+      });
+    } catch (error) {
+      console.error("Email-only booking failed:", error);
+      return NextResponse.json(
+        { message: "Booking submission failed. Please contact us on WhatsApp for assistance." },
+        { status: 500 }
+      );
+    }
+  }
+
+  // FULL MODE: Database + Email booking
   const windows = await loadAvailabilityWindows();
   if (!isSlotWithinAvailability(input.preferredDateTime, windows)) {
     return NextResponse.json(
