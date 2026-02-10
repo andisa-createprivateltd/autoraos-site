@@ -76,6 +76,44 @@ export default function DealerOsPage() {
         </p>
       </section>
 
+      <section className="grid gap-5 md:grid-cols-2">
+        <article className="rounded-3xl border border-tide/20 bg-gradient-to-br from-tide/5 to-white p-6 shadow-sm">
+          <h2 className="text-2xl font-semibold text-coal">What changes in week 1</h2>
+          <ul className="mt-4 space-y-2 text-sm text-steel">
+            <li className="flex gap-2">
+              <span className="text-tide">•</span>
+              <span>Response time drops to {"<"} 60 seconds</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-tide">•</span>
+              <span>After-hours coverage via WhatsApp AI</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-tide">•</span>
+              <span>Bookings created automatically from conversations</span>
+            </li>
+          </ul>
+        </article>
+
+        <article className="rounded-3xl border border-ember/20 bg-gradient-to-br from-ember/5 to-white p-6 shadow-sm">
+          <h2 className="text-2xl font-semibold text-coal">What your team does differently</h2>
+          <ul className="mt-4 space-y-2 text-sm text-steel">
+            <li className="flex gap-2">
+              <span className="text-ember">•</span>
+              <span>Work from one unified inbox</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-ember">•</span>
+              <span>Follow AI-powered follow-up prompts</span>
+            </li>
+            <li className="flex gap-2">
+              <span className="text-ember">•</span>
+              <span>Use structured booking workflow instead of scattered notes</span>
+            </li>
+          </ul>
+        </article>
+      </section>
+
       <section className="grid gap-4 md:grid-cols-2">
         {screens.map((screen) => (
           <article key={screen.title} className="rounded-2xl border border-steel/12 bg-white p-6 shadow-sm">
