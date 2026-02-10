@@ -87,7 +87,7 @@ export async function sendBookingEmails(payload: {
     console.log(`Booking emails sent successfully for booking ${payload.bookingId}`);
   } catch (error) {
     console.error("Failed to send booking emails:", error);
-    throw new Error("Email delivery failed");
+    // Don't throw - let the caller handle email failure gracefully
   }
 }
 

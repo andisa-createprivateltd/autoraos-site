@@ -179,12 +179,12 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Booking submission failed:", error);
+    // Log detailed error for debugging but don't expose internal details to client
     const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+    console.error("Error details:", errorMessage);
+    
     return NextResponse.json(
-      { 
-        message: "Booking failed. Please try again or contact us on WhatsApp.",
-        error: errorMessage 
-      },
+      { message: "Booking failed. Please try again or contact us on WhatsApp." },
       { status: 500 }
     );
   }
