@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-manrope: "Avenir Next";
+  --font-cormorant: "Georgia";
+  --ink: #040e17;
+  --coal: #081726;
+  --steel: #44596d;
+  --mist: #e9eef3;
+  --ember: #cc4f2c;
+  --tide: #14708a;
+  --gold: #f2b859;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--coal);
+  background: radial-gradient(circle at 10% 15%, #f9fcff 0%, #f5f8fb 35%, #eef3f8 100%);
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-manrope), "Avenir Next", "Segoe UI", sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+main {
+  min-height: 65vh;
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(68, 89, 109, 0.24);
+  background: white;
+  padding: 0.72rem 0.9rem;
+  font-size: 0.95rem;
+  color: var(--coal);
+}
+
+.input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 112, 138, 0.22);
+  border-color: rgba(20, 112, 138, 0.55);
+}
+
+::selection {
+  background: rgba(242, 184, 89, 0.45);
+}

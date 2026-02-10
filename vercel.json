@@ -1,0 +1,30 @@
+{
+  "name": "Create Private Dealer OS",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "nextjs",
+  "public": true,
+  "env": [
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_URL",
+      "description": "Supabase project URL"
+    },
+    {
+      "key": "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+      "description": "Supabase anonymous key"
+    },
+    {
+      "key": "SENDGRID_API_KEY",
+      "description": "SendGrid API key for emails"
+    },
+    {
+      "key": "GOOGLE_MAPS_API_KEY",
+      "description": "Google Maps API key"
+    }
+  ],
+  "domains": [
+    "autoraos.com",
+    "www.autoraos.com"
+  ]
+}

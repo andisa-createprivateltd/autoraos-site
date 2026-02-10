@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-manrope: "Manrope";
+  --font-cormorant: "Cormorant Garamond";
+  --ink: #05101a;
+  --coal: #0a1d2e;
+  --steel: #455a6f;
+  --mist: #e8eef5;
+  --ember: #cc5434;
+  --tide: #156f89;
+  --gold: #eeb562;
+  --surface: #ffffff;
+  --surface-soft: #f6f9fc;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  color: var(--coal);
+  background: #f4f7fb;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-manrope), "Avenir Next", "Segoe UI", sans-serif;
+  line-height: 1.45;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+main {
+  min-height: 65vh;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  line-height: 1.15;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.text-pretty {
+  text-wrap: pretty;
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.95rem;
+  border: 1px solid rgba(69, 90, 111, 0.2);
+  background: #ffffff;
+  padding: 0.75rem 0.95rem;
+  font-size: 0.95rem;
+  color: var(--coal);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(20, 112, 138, 0.18);
+  border-color: rgba(20, 112, 138, 0.55);
+}
+
+.input::placeholder {
+  color: rgba(69, 90, 111, 0.72);
+}
+
+.surface-card {
+  border: 1px solid rgba(69, 90, 111, 0.14);
+  background: #ffffff;
+  border-radius: 1.4rem;
+  box-shadow: 0 10px 24px rgba(5, 16, 26, 0.06);
+}
+
+.hero-panel {
+  border-radius: 2rem;
+  border: 1px solid rgba(69, 90, 111, 0.16);
+  background: #ffffff;
+  box-shadow: 0 14px 30px rgba(5, 16, 26, 0.08);
+}
+
+.section-kicker {
+  display: inline-flex;
+  border-radius: 999px;
+  border: 1px solid rgba(69, 90, 111, 0.16);
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.3rem 0.62rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--steel);
+}
+
+::selection {
+  background: rgba(242, 184, 89, 0.45);
+}
