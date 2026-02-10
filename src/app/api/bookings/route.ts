@@ -84,7 +84,7 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         success: true,
-        bookingId: "email-" + Date.now(),
+        bookingId: `email-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
         message: "Booking request received. We'll confirm shortly via email.",
         booking: {
           dealershipName: input.dealershipName,

@@ -122,9 +122,9 @@ export async function sendSimpleBookingEmail(payload: {
     const adminMsg = {
       to: env.ADMIN_EMAIL as string,
       from: env.ADMIN_EMAIL as string,
-      subject: `⚠️ NEW BOOKING (Email-Only Mode): ${payload.dealershipName}`,
+      subject: `[EMAIL-ONLY MODE] NEW BOOKING: ${payload.dealershipName}`,
       text: [
-        `⚠️ BOOKING RECEIVED (Database not available - Email-only mode)`,
+        `[ALERT] BOOKING RECEIVED (Database not available - Email-only mode)`,
         ``,
         `Timestamp: ${timestamp}`,
         `Dealership: ${payload.dealershipName}`,
@@ -137,7 +137,7 @@ export async function sendSimpleBookingEmail(payload: {
         `Source: ${payload.source || "website"}`,
         `Notes: ${payload.notes || "None"}`,
         ``,
-        `⚠️ ACTION REQUIRED: This booking was not saved to database.`,
+        `[ACTION REQUIRED] This booking was not saved to database.`,
         `Please follow up with the customer directly.`,
         ``,
         `WhatsApp link: ${waLink(AUTORA_WHATSAPP, `Follow up on booking request from ${payload.dealershipName}`)}`,
