@@ -9,6 +9,19 @@ import * as XLSX from 'xlsx';
 import type { BookingData } from './booking-handler';
 
 /**
+ * Generate Excel file buffer
+ * Shared configuration for consistent Excel generation
+ */
+function writeWorkbookToBuffer(workbook: XLSX.WorkBook): Buffer {
+  const buffer = XLSX.write(workbook, {
+    type: 'buffer',
+    bookType: 'xlsx'
+  });
+  // Type assertion for Node.js environment where buffer type is guaranteed
+  return buffer as Buffer;
+}
+
+/**
  * Export a single booking to Excel format
  * Returns the file buffer that can be saved or uploaded
  */
@@ -59,12 +72,7 @@ export function exportBookingToExcel(
   XLSX.utils.book_append_sheet(workbook, worksheet, 'Booking Details');
   
   // Generate Excel file buffer
-  const excelBuffer = XLSX.write(workbook, {
-    type: 'buffer',
-    bookType: 'xlsx'
-  });
-  
-  return excelBuffer;
+  return writeWorkbookToBuffer(workbook);
 }
 
 /**
@@ -135,12 +143,7 @@ export function exportBookingsToMasterExcel(
   XLSX.utils.book_append_sheet(workbook, worksheet, 'All Bookings');
   
   // Generate Excel file buffer
-  const excelBuffer = XLSX.write(workbook, {
-    type: 'buffer',
-    bookType: 'xlsx'
-  });
-  
-  return excelBuffer;
+  return writeWorkbookToBuffer(workbook);
 }
 
 /**

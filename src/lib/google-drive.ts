@@ -112,6 +112,14 @@ export async function uploadBookingExcelToDrive(
 }
 
 /**
+ * Sanitize folder name for Google Drive queries
+ * Escapes single quotes to prevent query syntax errors
+ */
+function sanitizeFolderName(name: string): string {
+  return name.replace(/'/g, "\\'");
+}
+
+/**
  * Create or find a folder in Google Drive
  * Used to organize bookings by date or category
  */
@@ -126,10 +134,11 @@ export async function findOrCreateFolder(
   try {
     const drive = createDriveClient();
     const parent = parentFolderId || GOOGLE_DRIVE_CONFIG.folderId;
+    const sanitizedName = sanitizeFolderName(folderName);
 
     // Search for existing folder
     const searchResponse = await drive.files.list({
-      q: `name='${folderName}' and '${parent}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`,
+      q: `name='${sanitizedName}' and '${parent}' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false`,
       fields: 'files(id, name)',
       spaces: 'drive'
     });

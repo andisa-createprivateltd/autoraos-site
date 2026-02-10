@@ -110,30 +110,29 @@ export async function processBooking(data: BookingData): Promise<BookingResult |
   }
 
   // Step 3: Export to Excel spreadsheet (backup mechanism)
-  let excelBuffer: Buffer | null = null;
   try {
-    excelBuffer = exportBookingToExcel(bookingId, data, timestamp);
+    const excelBuffer = exportBookingToExcel(bookingId, data, timestamp);
     excelCreated = true;
     console.log(`✓ Excel file created for ${bookingId}`);
+
+    // Step 4: Upload Excel to Google Drive (cloud backup)
+    if (isGoogleDriveEnabled()) {
+      try {
+        const fileName = generateExcelFilename(bookingId, timestamp);
+        const uploadResult = await uploadBookingExcelToDrive(fileName, excelBuffer);
+        uploadedToDrive = true;
+        driveFileUrl = uploadResult.fileUrl;
+        console.log(`✓ Excel uploaded to Google Drive: ${bookingId}`);
+      } catch (driveError) {
+        // Drive upload failure is non-critical
+        console.error(`✗ Google Drive upload failed for ${bookingId} (non-critical):`, driveError);
+      }
+    } else {
+      console.log(`ℹ Google Drive not configured - skipping upload for ${bookingId}`);
+    }
   } catch (excelError) {
     // Excel creation failure is non-critical
     console.error(`✗ Excel creation failed for ${bookingId} (non-critical):`, excelError);
-  }
-
-  // Step 4: Upload Excel to Google Drive (cloud backup)
-  if (excelCreated && excelBuffer && isGoogleDriveEnabled()) {
-    try {
-      const fileName = generateExcelFilename(bookingId, timestamp);
-      const uploadResult = await uploadBookingExcelToDrive(fileName, excelBuffer);
-      uploadedToDrive = true;
-      driveFileUrl = uploadResult.fileUrl;
-      console.log(`✓ Excel uploaded to Google Drive: ${bookingId}`);
-    } catch (driveError) {
-      // Drive upload failure is non-critical
-      console.error(`✗ Google Drive upload failed for ${bookingId} (non-critical):`, driveError);
-    }
-  } else if (!isGoogleDriveEnabled()) {
-    console.log(`ℹ Google Drive not configured - skipping upload for ${bookingId}`);
   }
 
   return {
