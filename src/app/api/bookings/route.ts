@@ -6,6 +6,7 @@ import { sendBookingEmails } from "@/lib/email";
 import { getSupabaseClient } from "@/lib/supabase";
 import { loadAvailabilityWindows, isSlotWithinAvailability } from "@/lib/scheduling";
 import { waLink } from "@/lib/utils";
+import { hasSupabase } from "@/lib/env";
 import {
   bookingLeadStatus,
   captureLeadThread,
@@ -14,6 +15,15 @@ import {
 } from "@/lib/beta-capture";
 
 export async function POST(request: Request) {
+  // Early check for required configuration
+  if (!hasSupabase()) {
+    console.error("Booking API called but Supabase is not configured");
+    return NextResponse.json(
+      { message: "Booking system is not configured. Please contact support." },
+      { status: 503 }
+    );
+  }
+
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const userAgent = request.headers.get("user-agent") || "unknown";
   const limit = checkRateLimit(`booking:${ip}:${userAgent.slice(0, 50)}`);
@@ -75,7 +85,8 @@ export async function POST(request: Request) {
       .limit(1);
 
     if (existingError) {
-      throw existingError;
+      console.error("Error checking existing bookings:", existingError);
+      throw new Error("Database error: Could not check slot availability");
     }
 
     if (existing?.length) {
@@ -112,7 +123,8 @@ export async function POST(request: Request) {
       .single();
 
     if (insertError) {
-      throw insertError;
+      console.error("Error creating booking:", insertError);
+      throw new Error("Database error: Could not create booking");
     }
 
     const bookingId = created.id as string;
@@ -124,18 +136,24 @@ export async function POST(request: Request) {
       contactPerson: input.contactPerson
     });
 
-    await sendBookingEmails({
-      bookingId,
-      dealershipName: input.dealershipName,
-      brand: input.brand,
-      contactPerson: input.contactPerson,
-      phone: input.phone,
-      email: input.email,
-      province: input.province,
-      city: input.city,
-      preferredDateTime: input.preferredDateTime,
-      inviteIcs
-    });
+    // Email sending should not fail the booking - wrap in try-catch
+    try {
+      await sendBookingEmails({
+        bookingId,
+        dealershipName: input.dealershipName,
+        brand: input.brand,
+        contactPerson: input.contactPerson,
+        phone: input.phone,
+        email: input.email,
+        province: input.province,
+        city: input.city,
+        preferredDateTime: input.preferredDateTime,
+        inviteIcs
+      });
+    } catch (emailError) {
+      // Log email error but don't fail the booking
+      console.error("Email notification failed (booking still created):", emailError);
+    }
 
     const whatsappConfirmationUrl = waLink(
       input.phone,
@@ -160,9 +178,13 @@ export async function POST(request: Request) {
       whatsappConfirmationUrl
     });
   } catch (error) {
-    console.error("Booking submission failed", error);
+    console.error("Booking submission failed:", error);
+    const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
     return NextResponse.json(
-      { message: "Booking failed. Please try again or contact us on WhatsApp." },
+      { 
+        message: "Booking failed. Please try again or contact us on WhatsApp.",
+        error: errorMessage 
+      },
       { status: 500 }
     );
   }

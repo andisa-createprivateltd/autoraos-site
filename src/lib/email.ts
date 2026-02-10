@@ -30,56 +30,65 @@ export async function sendBookingEmails(payload: {
   preferredDateTime: string;
   inviteIcs: string;
 }) {
-  if (!isEmailReady()) return;
+  if (!isEmailReady()) {
+    console.warn("Email not configured. Skipping email notifications. Set SENDGRID_API_KEY and ADMIN_EMAIL to enable.");
+    return;
+  }
 
-  sgMail.setApiKey(env.SENDGRID_API_KEY as string);
+  try {
+    sgMail.setApiKey(env.SENDGRID_API_KEY as string);
 
-  const prettyDate = formatDateTime(payload.preferredDateTime);
+    const prettyDate = formatDateTime(payload.preferredDateTime);
 
-  const customerMsg = {
-    to: payload.email,
-    from: env.ADMIN_EMAIL as string,
-    subject: "Your Dealer Lead Audit is booked",
-    text: [
-      `Hi ${payload.contactPerson},`,
-      "",
-      `Your 15-minute Dealer Lead Audit is booked for ${prettyDate}.`,
-      `Dealership: ${payload.dealershipName} (${payload.brand})`,
-      "",
-      "Reply to this email if you need to reschedule.",
-      "",
-      `${PLATFORM_NAME} (${PARENT_COMPANY_NAME})`
-    ].join("\n"),
-    attachments: [
-      {
-        content: Buffer.from(payload.inviteIcs).toString("base64"),
-        filename: "dealer-lead-audit.ics",
-        type: "text/calendar",
-        disposition: "attachment"
-      }
-    ]
-  };
+    const customerMsg = {
+      to: payload.email,
+      from: env.ADMIN_EMAIL as string,
+      subject: "Your Dealer Lead Audit is booked",
+      text: [
+        `Hi ${payload.contactPerson},`,
+        "",
+        `Your 15-minute Dealer Lead Audit is booked for ${prettyDate}.`,
+        `Dealership: ${payload.dealershipName} (${payload.brand})`,
+        "",
+        "Reply to this email if you need to reschedule.",
+        "",
+        `${PLATFORM_NAME} (${PARENT_COMPANY_NAME})`
+      ].join("\n"),
+      attachments: [
+        {
+          content: Buffer.from(payload.inviteIcs).toString("base64"),
+          filename: "dealer-lead-audit.ics",
+          type: "text/calendar",
+          disposition: "attachment"
+        }
+      ]
+    };
 
-  // Admin notification with all booking details
-  // Recipient is configured via ADMIN_EMAIL environment variable (should be andisa@createprivateltd.com)
-  const adminMsg = {
-    to: env.ADMIN_EMAIL as string,
-    from: env.ADMIN_EMAIL as string,
-    subject: `New Audit Booking: ${payload.dealershipName}`,
-    text: [
-      `Booking ID: ${payload.bookingId}`,
-      `Dealership: ${payload.dealershipName}`,
-      `Brand: ${payload.brand}`,
-      `Contact: ${payload.contactPerson}`,
-      `Phone: ${payload.phone}`,
-      `Email: ${payload.email}`,
-      `Location: ${payload.city}, ${payload.province}`,
-      `Preferred time: ${prettyDate}`,
-      `WhatsApp follow-up: ${waLink(AUTORA_WHATSAPP, `New booking ${payload.bookingId} - ${payload.dealershipName}`)}`
-    ].join("\n")
-  };
+    // Admin notification with all booking details
+    // Recipient is configured via ADMIN_EMAIL environment variable (should be andisa@createprivateltd.com)
+    const adminMsg = {
+      to: env.ADMIN_EMAIL as string,
+      from: env.ADMIN_EMAIL as string,
+      subject: `New Audit Booking: ${payload.dealershipName}`,
+      text: [
+        `Booking ID: ${payload.bookingId}`,
+        `Dealership: ${payload.dealershipName}`,
+        `Brand: ${payload.brand}`,
+        `Contact: ${payload.contactPerson}`,
+        `Phone: ${payload.phone}`,
+        `Email: ${payload.email}`,
+        `Location: ${payload.city}, ${payload.province}`,
+        `Preferred time: ${prettyDate}`,
+        `WhatsApp follow-up: ${waLink(AUTORA_WHATSAPP, `New booking ${payload.bookingId} - ${payload.dealershipName}`)}`
+      ].join("\n")
+    };
 
-  await Promise.all([sgMail.send(customerMsg), sgMail.send(adminMsg)]);
+    await Promise.all([sgMail.send(customerMsg), sgMail.send(adminMsg)]);
+    console.log(`Booking emails sent successfully for booking ${payload.bookingId}`);
+  } catch (error) {
+    console.error("Failed to send booking emails:", error);
+    throw new Error("Email delivery failed");
+  }
 }
 
 export async function sendContactNotification(payload: {
