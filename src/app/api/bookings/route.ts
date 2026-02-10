@@ -120,7 +120,10 @@ export async function POST(request: Request) {
     whatsappConfirmationUrl,
     metadata: {
       emailSent: result.emailSent,
-      savedToDatabase: result.savedToDatabase
+      savedToDatabase: result.savedToDatabase,
+      excelCreated: result.excelCreated,
+      uploadedToDrive: result.uploadedToDrive,
+      driveFileUrl: result.driveFileUrl
     }
   });
 }

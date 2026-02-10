@@ -4,9 +4,11 @@
  * This module provides a clean, reliable booking process that:
  * 1. Always accepts bookings via email
  * 2. Optionally stores in database if available
- * 3. Never fails the user due to technical issues
+ * 3. Exports to Excel spreadsheet for backup
+ * 4. Uploads to Google Drive for cloud storage
+ * 5. Never fails the user due to technical issues
  * 
- * Philosophy: Email is the primary channel, database is an enhancement
+ * Philosophy: Email is the primary channel, everything else is enhancement
  */
 
 import { sendSimpleBookingEmail } from "@/lib/email";
@@ -18,6 +20,8 @@ import {
   ensureDealerAccount,
   mapLeadSource
 } from "@/lib/beta-capture";
+import { exportBookingToExcel, generateExcelFilename } from "@/lib/excel-export";
+import { isGoogleDriveEnabled, uploadBookingExcelToDrive } from "@/lib/google-drive";
 
 export type BookingData = {
   dealershipName: string;
@@ -37,6 +41,9 @@ export type BookingResult = {
   bookingId: string;
   savedToDatabase: boolean;
   emailSent: boolean;
+  excelCreated: boolean;
+  uploadedToDrive: boolean;
+  driveFileUrl?: string;
 };
 
 export type BookingError = {
@@ -47,12 +54,19 @@ export type BookingError = {
 
 /**
  * Process a booking with email-first approach
- * This function ALWAYS attempts to send email first, then optionally saves to database
+ * This function ALWAYS attempts to send email first, then optionally:
+ * - Saves to database
+ * - Exports to Excel
+ * - Uploads to Google Drive
  */
 export async function processBooking(data: BookingData): Promise<BookingResult | BookingError> {
   const bookingId = generateBookingId();
+  const timestamp = new Date();
   let emailSent = false;
   let savedToDatabase = false;
+  let excelCreated = false;
+  let uploadedToDrive = false;
+  let driveFileUrl: string | undefined;
 
   // Step 1: ALWAYS send email notification (primary channel)
   try {
@@ -95,11 +109,41 @@ export async function processBooking(data: BookingData): Promise<BookingResult |
     console.log(`ℹ Database not configured - booking ${bookingId} is email-only`);
   }
 
+  // Step 3: Export to Excel spreadsheet (backup mechanism)
+  let excelBuffer: Buffer | null = null;
+  try {
+    excelBuffer = exportBookingToExcel(bookingId, data, timestamp);
+    excelCreated = true;
+    console.log(`✓ Excel file created for ${bookingId}`);
+  } catch (excelError) {
+    // Excel creation failure is non-critical
+    console.error(`✗ Excel creation failed for ${bookingId} (non-critical):`, excelError);
+  }
+
+  // Step 4: Upload Excel to Google Drive (cloud backup)
+  if (excelCreated && excelBuffer && isGoogleDriveEnabled()) {
+    try {
+      const fileName = generateExcelFilename(bookingId, timestamp);
+      const uploadResult = await uploadBookingExcelToDrive(fileName, excelBuffer);
+      uploadedToDrive = true;
+      driveFileUrl = uploadResult.fileUrl;
+      console.log(`✓ Excel uploaded to Google Drive: ${bookingId}`);
+    } catch (driveError) {
+      // Drive upload failure is non-critical
+      console.error(`✗ Google Drive upload failed for ${bookingId} (non-critical):`, driveError);
+    }
+  } else if (!isGoogleDriveEnabled()) {
+    console.log(`ℹ Google Drive not configured - skipping upload for ${bookingId}`);
+  }
+
   return {
     success: true,
     bookingId,
     savedToDatabase,
-    emailSent
+    emailSent,
+    excelCreated,
+    uploadedToDrive,
+    driveFileUrl
   };
 }
 
