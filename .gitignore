@@ -12,3 +12,10 @@ coverage
 .vercel
 *.tsbuildinfo
 .local
+
+# Large archived files (use cloud storage instead)
+*.zip
+*.tar.gz
+AUTORA-site-source-clean.zip
+AUTORA-site-vscode.zip
+createprivate-site-backup-*.tar.gz
