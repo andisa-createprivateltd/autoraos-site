@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
-import { AUTORA_WHATSAPP, BRANDS, PROVINCES } from "@/lib/constants";
+import { AUTORA_WHATSAPP, BRANDS } from "@/lib/constants";
 import { formatDateTime, waLink } from "@/lib/utils";
 
 type PrefillData = {
@@ -43,11 +43,6 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
     contactPerson: "",
     phone: "",
     email: "",
-    province:
-      prefill?.province && PROVINCES.includes(prefill.province as (typeof PROVINCES)[number])
-        ? prefill.province
-        : "Gauteng",
-    city: prefill?.city || "",
     preferredDateTime: "",
     notes: "",
     honeypot: ""
@@ -234,31 +229,6 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
           />
         </Field>
 
-        <Field label="Province" required>
-          <select
-            value={form.province}
-            onChange={(event) => setForm((prev) => ({ ...prev, province: event.target.value }))}
-            className="input"
-            required
-          >
-            {PROVINCES.map((province) => (
-              <option key={province} value={province}>
-                {province}
-              </option>
-            ))}
-          </select>
-        </Field>
-
-        <Field label="City" required>
-          <input
-            required
-            value={form.city}
-            onChange={(event) => setForm((prev) => ({ ...prev, city: event.target.value }))}
-            className="input"
-            placeholder="City"
-          />
-        </Field>
-
         <Field label="Preferred date/time" required>
           {loadingSlots ? (
             <div className="input flex items-center text-sm text-steel">Loading available slots...</div>
@@ -294,8 +264,8 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
         <textarea
           value={form.notes}
           onChange={(event) => setForm((prev) => ({ ...prev, notes: event.target.value }))}
-          className="input min-h-28"
-          placeholder="Anything we should review before the call?"
+          className="input min-h-20"
+          placeholder="Anything specific you'd like to discuss?"
         />
       </Field>
 
