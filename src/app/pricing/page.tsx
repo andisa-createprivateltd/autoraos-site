@@ -77,9 +77,10 @@ export default function PricingPage() {
             </ul>
 
             <p className="mt-5 text-xs uppercase tracking-[0.12em] text-tide">Best for: {tier.bestFor}</p>
+            <p className="mt-2 text-xs text-steel">Designed for dealerships only.</p>
 
             <ButtonLink href="/book" className="mt-6 w-full">
-              Request Audit
+              Book Free 15-Minute Audit
             </ButtonLink>
           </article>
         ))}

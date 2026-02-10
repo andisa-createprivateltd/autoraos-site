@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { DealershipNearMe } from "@/components/dealership-near-me";
+import { ButtonLink } from "@/components/ui/button-link";
 
 export const metadata: Metadata = {
   title: "Dealerships Near Me"
@@ -18,6 +19,16 @@ export default function DealershipsNearMePage() {
       </section>
 
       <DealershipNearMe />
+
+      <section className="rounded-3xl border border-steel/15 bg-white p-6 shadow-soft">
+        <h2 className="text-xl font-semibold text-coal">Want this installed for your dealership?</h2>
+        <p className="mt-2 text-sm text-steel">
+          Get AUTORA running at your dealership — respond faster, book more test drives, and stop losing leads.
+        </p>
+        <div className="mt-4">
+          <ButtonLink href="/book">Book Free 15-Minute Dealer Audit</ButtonLink>
+        </div>
+      </section>
     </div>
   );
 }

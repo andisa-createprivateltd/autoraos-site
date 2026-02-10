@@ -3,7 +3,6 @@ import { CtaBanner } from "@/components/cta-banner";
 import {
   HOW_IT_WORKS,
   PLATFORM_NAME,
-  PLATFORM_SUBSIDIARY_LINE,
   SOCIAL_PROOF_PLACEHOLDERS
 } from "@/lib/constants";
 
@@ -27,21 +26,21 @@ export default function HomePage() {
         <p className="relative z-10 section-kicker">{PLATFORM_NAME}</p>
 
         <h1 className="relative z-10 mt-6 max-w-3xl text-balance text-4xl font-semibold text-ink md:text-5xl">
-          More Test Drives. More Sales. Powered by Paid Ads + WhatsApp AI.
+          More Test Drives. Faster Responses. Fewer Missed Leads.
         </h1>
 
         <p className="relative z-10 mt-5 max-w-2xl text-pretty text-base leading-relaxed text-steel md:text-lg">
-          One platform for Chinese vehicle dealerships in South Africa to capture enquiries faster, reply instantly, and convert more showroom traffic. {PLATFORM_SUBSIDIARY_LINE}.
+          WhatsApp + lead operating system built for dealership sales teams.
         </p>
         <p className="relative z-10 mt-3 max-w-2xl text-pretty text-sm leading-relaxed text-steel">
-          Created specifically for new-vehicle dealerships, with a focus on Chinese automotive brands.
+          Centralize enquiries, respond in seconds, and turn leads into booked test drives—without operational chaos.
         </p>
         <p className="relative z-10 mt-3 inline-flex rounded-full border border-steel/16 bg-mist/55 px-3 py-1 text-xs font-semibold uppercase tracking-[0.11em] text-steel">
           Private beta now onboarding dealership partners in Gauteng
         </p>
 
         <div className="relative z-10 mt-8 flex flex-wrap gap-3">
-          <ButtonLink href="/book">Get a Free 15-Minute Audit</ButtonLink>
+          <ButtonLink href="/book">Book Free 15-Minute Dealer Audit</ButtonLink>
           <ButtonLink href="/pricing" variant="ghost">
             View Platform Pricing
           </ButtonLink>
@@ -55,6 +54,10 @@ export default function HomePage() {
             </div>
           ))}
         </div>
+
+        <p className="relative z-10 mt-5 text-xs text-steel">
+          Optional growth add-on available after onboarding (paid demand).
+        </p>
       </section>
 
       <section className="grid gap-4 md:grid-cols-3">

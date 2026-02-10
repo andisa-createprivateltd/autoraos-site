@@ -23,6 +23,15 @@ export function SiteFooter() {
               {link.label}
             </Link>
           ))}
+          <Link href="/privacy" className="text-white/80 transition hover:text-white">
+            Privacy
+          </Link>
+          <Link href="/terms" className="text-white/80 transition hover:text-white">
+            Terms
+          </Link>
+          <Link href="/popia" className="text-white/80 transition hover:text-white">
+            POPIA &amp; Data Handling
+          </Link>
         </div>
       </div>
     </footer>

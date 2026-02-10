@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/forms/contact-form";
-import { AUTORA_WHATSAPP, PLATFORM_NAME, PLATFORM_SUBSIDIARY_LINE } from "@/lib/constants";
+import { AUTORA_WHATSAPP, PLATFORM_NAME } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Contact"
@@ -13,7 +13,7 @@ export default function ContactPage() {
         <p className="text-xs uppercase tracking-[0.15em] text-tide">Contact</p>
         <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">Speak with {PLATFORM_NAME}</h1>
         <p className="mt-4 text-pretty text-base leading-relaxed text-steel">
-          Share your dealership response and conversion targets. We will reply with practical platform-fit next steps. {PLATFORM_SUBSIDIARY_LINE}.
+          Share your dealership response and conversion targets. We will reply with practical platform-fit next steps.
         </p>
 
         <a

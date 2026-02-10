@@ -9,7 +9,6 @@ import { cn } from "@/lib/utils";
 function shortMenuLabel(label: string) {
   if (label === "AUTORA OS") return "OS";
   if (label === "Dealerships Near Me") return "Near Me";
-  if (label === "Narrative") return "Story";
   return label;
 }
 
@@ -49,7 +48,7 @@ export function SiteHeader() {
             <ButtonLink href="/os/login" variant="ghost">
               Login
             </ButtonLink>
-            <ButtonLink href="/book">Free Audit</ButtonLink>
+            <ButtonLink href="/book">Book Free 15-Minute Dealer Audit</ButtonLink>
           </div>
         </div>
 
@@ -75,7 +74,7 @@ export function SiteHeader() {
                 Login
               </ButtonLink>
               <ButtonLink href="/book" className="mt-2 w-full">
-                Free Audit
+                Book Free 15-Minute Dealer Audit
               </ButtonLink>
             </div>
           </div>
