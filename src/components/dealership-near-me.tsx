@@ -340,7 +340,7 @@ export function DealershipNearMe() {
             <iframe
               title="Dealership map"
               src={`https://maps.google.com/maps?q=${mapCenter}&z=11&output=embed`}
-              className="h-[360px] w-full"
+              className="h-[280px] w-full sm:h-[320px] md:h-[360px] lg:h-[400px]"
               loading="lazy"
             />
           </div>

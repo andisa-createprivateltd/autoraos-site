@@ -25,6 +25,11 @@ export const metadata: Metadata = {
     "Test-drive booking software",
     PARENT_COMPANY_NAME
   ],
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5
+  },
   openGraph: {
     title: PLATFORM_NAME,
     description: `The operating system for dealership leads and WhatsApp sales. ${PLATFORM_SUBSIDIARY_LINE}.`,
