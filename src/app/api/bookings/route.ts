@@ -1,19 +1,26 @@
 import { NextResponse } from "next/server";
 import { bookingSchema } from "@/lib/validation";
 import { checkRateLimit } from "@/lib/rate-limit";
-import { createAuditInvite } from "@/lib/calendar";
-import { sendBookingEmails } from "@/lib/email";
-import { getSupabaseClient } from "@/lib/supabase";
-import { loadAvailabilityWindows, isSlotWithinAvailability } from "@/lib/scheduling";
 import { waLink } from "@/lib/utils";
-import {
-  bookingLeadStatus,
-  captureLeadThread,
-  ensureDealerAccount,
-  mapLeadSource
-} from "@/lib/beta-capture";
+import { processBooking } from "@/lib/booking-handler";
 
+/**
+ * Booking API - Reconstructed for Simplicity and Reliability
+ * 
+ * Architecture:
+ * 1. Validate input
+ * 2. Check rate limits
+ * 3. Process booking (email-first approach)
+ * 4. Return success/failure
+ * 
+ * Philosophy:
+ * - Email is the primary booking channel
+ * - Database is an optional enhancement
+ * - Never fail the user due to database issues
+ * - Simple, clear code flow
+ */
 export async function POST(request: Request) {
+  // Rate limiting
   const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
   const userAgent = request.headers.get("user-agent") || "unknown";
   const limit = checkRateLimit(`booking:${ip}:${userAgent.slice(0, 50)}`);
@@ -25,145 +32,98 @@ export async function POST(request: Request) {
     );
   }
 
+  // Parse and validate JSON
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ message: "Invalid JSON payload." }, { status: 400 });
+    return NextResponse.json(
+      { message: "Invalid JSON payload." },
+      { status: 400 }
+    );
   }
 
+  // Validate booking data
   const parsed = bookingSchema.safeParse(body);
   if (!parsed.success) {
     return NextResponse.json(
-      { message: parsed.error.issues[0]?.message || "Invalid booking payload." },
+      { message: parsed.error.issues[0]?.message || "Invalid booking data." },
       { status: 400 }
     );
   }
 
   const input = parsed.data;
+
+  // Check honeypot (spam protection)
   if (input.honeypot) {
-    return NextResponse.json({ message: "Spam detection triggered." }, { status: 400 });
-  }
-
-  const preferredDate = new Date(input.preferredDateTime);
-  if (preferredDate.getTime() < Date.now() + 10 * 60 * 1000) {
-    return NextResponse.json({ message: "Choose a future slot at least 10 minutes from now." }, { status: 400 });
-  }
-
-  const windows = await loadAvailabilityWindows();
-  if (!isSlotWithinAvailability(input.preferredDateTime, windows)) {
     return NextResponse.json(
-      { message: "Selected time is outside configured booking availability." },
+      { message: "Spam detection triggered." },
       { status: 400 }
     );
   }
 
-  try {
-    const supabase = getSupabaseClient();
-    const dealerId = await ensureDealerAccount(supabase, {
-      dealershipName: input.dealershipName,
-      brand: input.brand,
-      city: input.city,
-      plan: "growth"
-    });
-
-    const { data: existing, error: existingError } = await supabase
-      .from("bookings")
-      .select("id")
-      .eq("scheduled_for", input.preferredDateTime)
-      .in("status", ["booked", "completed"])
-      .limit(1);
-
-    if (existingError) {
-      throw existingError;
-    }
-
-    if (existing?.length) {
-      return NextResponse.json(
-        { message: "That slot has already been booked. Please choose a different time." },
-        { status: 409 }
-      );
-    }
-
-    const leadCapture = await captureLeadThread(supabase, {
-      dealerId,
-      source: mapLeadSource(input.source),
-      name: input.contactPerson,
-      phone: input.phone,
-      vehicleInterest: input.brand,
-      status: bookingLeadStatus(),
-      leadMessage: input.notes || `Lead requested an audit booking for ${input.dealershipName}.`,
-      responseMessage: "Thanks, your booking request has been received. We are confirming your slot now.",
-      aiEventType: "booking"
-    });
-
-    const { data: created, error: insertError } = await supabase
-      .from("bookings")
-      .insert({
-        dealer_id: dealerId,
-        lead_id: leadCapture.leadId,
-        type: "appointment",
-        requested_at: new Date().toISOString(),
-        scheduled_for: input.preferredDateTime,
-        status: "booked",
-        created_by: "human"
-      })
-      .select("id")
-      .single();
-
-    if (insertError) {
-      throw insertError;
-    }
-
-    const bookingId = created.id as string;
-    const bookingUidDomain = process.env.BOOKING_UID_DOMAIN || "autoraos.com";
-    const inviteIcs = createAuditInvite({
-      uid: `${bookingId}@${bookingUidDomain}`,
-      startISO: input.preferredDateTime,
-      dealershipName: input.dealershipName,
-      contactPerson: input.contactPerson
-    });
-
-    await sendBookingEmails({
-      bookingId,
-      dealershipName: input.dealershipName,
-      brand: input.brand,
-      contactPerson: input.contactPerson,
-      phone: input.phone,
-      email: input.email,
-      province: input.province,
-      city: input.city,
-      preferredDateTime: input.preferredDateTime,
-      inviteIcs
-    });
-
-    const whatsappConfirmationUrl = waLink(
-      input.phone,
-      `Hi ${input.contactPerson}, your 15-minute Dealer Lead Audit with AUTORA is confirmed for ${new Date(
-        input.preferredDateTime
-      ).toLocaleString("en-ZA", {
-        dateStyle: "full",
-        timeStyle: "short"
-      })}.`
-    );
-
-    return NextResponse.json({
-      success: true,
-      bookingId,
-      message: "Booking confirmed.",
-      booking: {
-        dealershipName: input.dealershipName,
-        brand: input.brand,
-        contactPerson: input.contactPerson,
-        preferredDateTime: input.preferredDateTime
-      },
-      whatsappConfirmationUrl
-    });
-  } catch (error) {
-    console.error("Booking submission failed", error);
+  // Validate booking time
+  const preferredDate = new Date(input.preferredDateTime);
+  if (preferredDate.getTime() < Date.now() + 10 * 60 * 1000) {
     return NextResponse.json(
-      { message: "Booking failed. Please try again or contact us on WhatsApp." },
+      { message: "Please choose a time at least 10 minutes in the future." },
+      { status: 400 }
+    );
+  }
+
+  // Process the booking
+  const result = await processBooking({
+    dealershipName: input.dealershipName,
+    brand: input.brand,
+    contactPerson: input.contactPerson,
+    phone: input.phone,
+    email: input.email,
+    province: input.province,
+    city: input.city,
+    preferredDateTime: input.preferredDateTime,
+    notes: input.notes,
+    source: input.source
+  });
+
+  // Handle failure
+  if (!result.success) {
+    return NextResponse.json(
+      { message: result.error },
       { status: 500 }
     );
   }
+
+  // Success! Generate WhatsApp confirmation link
+  const whatsappConfirmationUrl = waLink(
+    input.phone,
+    `Hi ${input.contactPerson}, thank you for booking with AUTORA! Your 15-minute Dealer Lead Audit for ${
+      input.dealershipName
+    } is scheduled for ${new Date(input.preferredDateTime).toLocaleString("en-ZA", {
+      dateStyle: "full",
+      timeStyle: "short"
+    })}. We'll send you a confirmation email shortly.`
+  );
+
+  // Return success response
+  return NextResponse.json({
+    success: true,
+    bookingId: result.bookingId,
+    message: result.savedToDatabase
+      ? "Booking confirmed! Check your email for details."
+      : "Booking request received! We'll confirm via email shortly.",
+    booking: {
+      dealershipName: input.dealershipName,
+      brand: input.brand,
+      contactPerson: input.contactPerson,
+      preferredDateTime: input.preferredDateTime
+    },
+    whatsappConfirmationUrl,
+    metadata: {
+      emailSent: result.emailSent,
+      savedToDatabase: result.savedToDatabase,
+      excelCreated: result.excelCreated,
+      uploadedToDrive: result.uploadedToDrive,
+      driveFileUrl: result.driveFileUrl
+    }
+  });
 }
