@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PLATFORM_NAME, PLATFORM_SUBSIDIARY_LINE } from "@/lib/constants";
+import { PLATFORM_NAME } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "About"
@@ -29,7 +29,7 @@ export default function AboutPage() {
       <section className="max-w-4xl space-y-4 border-t border-steel/12 pt-12">
         <h2 className="text-2xl font-semibold text-coal">Why infrastructure, not services</h2>
         <p className="text-pretty text-base leading-relaxed text-steel">
-          Dealerships don't fail because of a lack of tools. They fail because execution breaks down between:
+          Dealerships don&apos;t fail because of a lack of tools. They fail because execution breaks down between:
         </p>
         <ul className="space-y-2 pl-6 text-base text-steel">
           <li className="flex gap-3">
@@ -180,7 +180,7 @@ export default function AboutPage() {
 
       {/* Where We're Going */}
       <section className="max-w-4xl space-y-4 border-t border-steel/12 pt-12">
-        <h2 className="text-2xl font-semibold text-coal">Where we're going</h2>
+        <h2 className="text-2xl font-semibold text-coal">Where we&apos;re going</h2>
         <p className="text-pretty text-base leading-relaxed text-steel">
           {PLATFORM_NAME} expands by depth, not by noise.
         </p>

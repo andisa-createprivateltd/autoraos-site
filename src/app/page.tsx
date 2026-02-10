@@ -3,7 +3,6 @@ import { CtaBanner } from "@/components/cta-banner";
 import {
   HOW_IT_WORKS,
   PLATFORM_NAME,
-  PLATFORM_SUBSIDIARY_LINE,
   SOCIAL_PROOF_PLACEHOLDERS
 } from "@/lib/constants";
 

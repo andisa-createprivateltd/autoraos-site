@@ -55,9 +55,9 @@ export default function TermsPage() {
           <ul className="list-inside list-disc space-y-2 pl-4">
             <li>Use the platform for any unlawful purpose or in violation of any regulations</li>
             <li>Attempt to gain unauthorized access to any part of the platform</li>
-            <li>Interfere with or disrupt the platform's operation</li>
+            <li>Interfere with or disrupt the platform&apos;s operation</li>
             <li>Use the platform to send spam or unsolicited communications</li>
-            <li>Violate WhatsApp's Business Solution Terms or communication policies</li>
+            <li>Violate WhatsApp&apos;s Business Solution Terms or communication policies</li>
             <li>Misrepresent your identity or affiliation</li>
           </ul>
         </div>

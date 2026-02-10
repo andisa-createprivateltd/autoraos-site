@@ -54,7 +54,7 @@ export default function PrivacyPage() {
         <div className="space-y-3">
           <h2 className="text-2xl font-semibold text-coal">Data Isolation and Security</h2>
           <p>
-            Client data is isolated by design. Each dealership's conversation data, leads, and booking information are segregated and accessible only to authorized users within that dealership's account.
+            Client data is isolated by design. Each dealership&apos;s conversation data, leads, and booking information are segregated and accessible only to authorized users within that dealership&apos;s account.
           </p>
           <p>
             We implement appropriate technical and organizational measures to protect your information against unauthorized access, alteration, disclosure, or destruction.
@@ -75,7 +75,7 @@ export default function PrivacyPage() {
         <div className="space-y-3">
           <h2 className="text-2xl font-semibold text-coal">WhatsApp Data Processing</h2>
           <p>
-            {PLATFORM_NAME} processes WhatsApp messages on behalf of dealerships. This processing is subject to WhatsApp's Business Solution Terms and Meta's data policies. We act as a data processor for dealership clients who remain the data controllers of their customer conversations.
+            {PLATFORM_NAME} processes WhatsApp messages on behalf of dealerships. This processing is subject to WhatsApp&apos;s Business Solution Terms and Meta&apos;s data policies. We act as a data processor for dealership clients who remain the data controllers of their customer conversations.
           </p>
         </div>
 
@@ -112,7 +112,7 @@ export default function PrivacyPage() {
         <div className="space-y-3">
           <h2 className="text-2xl font-semibold text-coal">Changes to This Policy</h2>
           <p>
-            We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last updated" date.
+            We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last updated&quot; date.
           </p>
         </div>
       </section>

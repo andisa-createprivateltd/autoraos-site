@@ -20,7 +20,7 @@ export default function PopiaPage() {
         <div className="space-y-3">
           <h2 className="text-2xl font-semibold text-coal">POPIA Compliance Overview</h2>
           <p>
-            {PLATFORM_NAME}, operated by {PARENT_COMPANY_NAME}, is committed to compliance with South Africa's Protection of Personal Information Act (POPIA), Act 4 of 2013.
+            {PLATFORM_NAME}, operated by {PARENT_COMPANY_NAME}, is committed to compliance with South Africa&apos;s Protection of Personal Information Act (POPIA), Act 4 of 2013.
           </p>
           <p>
             As a provider of dealership communication infrastructure, we process personal information on behalf of our dealership clients. We implement appropriate safeguards to ensure lawful, reasonable, and secure processing of personal information.
@@ -83,7 +83,7 @@ export default function PopiaPage() {
             <li>Customers must have opted in to receive WhatsApp messages</li>
             <li>Opt-in consent must be clear, specific, and documented</li>
             <li>Customers must be able to opt out at any time</li>
-            <li>WhatsApp message templates must comply with Meta's policies</li>
+            <li>WhatsApp message templates must comply with Meta&apos;s policies</li>
           </ul>
           <p>
             We provide tools to manage opt-in status, but dealerships are responsible for ensuring valid consent exists before sending messages.

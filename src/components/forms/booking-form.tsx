@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
-import { AUTORA_WHATSAPP, BRANDS, PROVINCES } from "@/lib/constants";
+import { AUTORA_WHATSAPP, BRANDS } from "@/lib/constants";
 import { formatDateTime, waLink } from "@/lib/utils";
 
 type PrefillData = {
