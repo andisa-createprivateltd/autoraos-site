@@ -76,6 +76,57 @@ export default function DealerOsPage() {
         </p>
       </section>
 
+      <section className="grid gap-6 md:grid-cols-2">
+        <article className="rounded-3xl border border-tide/20 bg-gradient-to-br from-tide/5 to-white p-6 shadow-sm">
+          <h2 className="text-2xl font-semibold text-coal">What changes in week 1</h2>
+          <ul className="mt-4 space-y-3 text-sm text-steel">
+            <li className="flex gap-3">
+              <span className="text-tide">✓</span>
+              <span><strong className="text-coal">Response time drops to &lt; 60 seconds</strong> — WhatsApp AI handles first contact instantly</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-tide">✓</span>
+              <span><strong className="text-coal">After-hours coverage</strong> — AI responds 24/7, no more lost weekend leads</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-tide">✓</span>
+              <span><strong className="text-coal">Bookings created automatically</strong> — Test drives scheduled without manual back-and-forth</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-tide">✓</span>
+              <span><strong className="text-coal">Single unified inbox</strong> — All enquiries in one place, no more missed messages</span>
+            </li>
+          </ul>
+        </article>
+
+        <article className="rounded-3xl border border-steel/12 bg-white p-6 shadow-sm">
+          <h2 className="text-2xl font-semibold text-coal">What your team does differently</h2>
+          <ul className="mt-4 space-y-3 text-sm text-steel">
+            <li className="flex gap-3">
+              <span className="text-coal">→</span>
+              <span><strong className="text-coal">Work from one inbox</strong> — No more checking WhatsApp Web, SMS, and email separately</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-coal">→</span>
+              <span><strong className="text-coal">AI handles qualification</strong> — Your team picks up where AI leaves off, with context</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-coal">→</span>
+              <span><strong className="text-coal">Follow-up prompts</strong> — System reminds you when leads need attention</span>
+            </li>
+            <li className="flex gap-3">
+              <span className="text-coal">→</span>
+              <span><strong className="text-coal">Booking workflow built-in</strong> — Calendar, confirmations, and reminders automated</span>
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section className="rounded-3xl border border-steel/10 bg-mist/30 p-6">
+        <h2 className="text-2xl font-semibold text-coal">Platform Modules</h2>
+        <p className="mt-2 text-sm text-steel">Complete feature breakdown by screen</p>
+      </section>
+
       <section className="grid gap-4 md:grid-cols-2">
         {screens.map((screen) => (
           <article key={screen.title} className="rounded-2xl border border-steel/12 bg-white p-6 shadow-sm">
@@ -103,7 +154,7 @@ export default function DealerOsPage() {
       <section className="flex flex-wrap gap-3">
         <ButtonLink href="/pricing">View AUTORA Pricing</ButtonLink>
         <ButtonLink href="/book" variant="ghost">
-          Schedule Platform Audit
+          Book Free 15-Minute Audit
         </ButtonLink>
       </section>
     </div>
