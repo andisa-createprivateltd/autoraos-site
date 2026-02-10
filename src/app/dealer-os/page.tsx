@@ -77,6 +77,26 @@ export default function DealerOsPage() {
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
+        <article className="rounded-2xl border border-tide/20 bg-tide/5 p-6">
+          <h2 className="text-xl font-semibold text-coal">What changes in week 1</h2>
+          <ul className="mt-3 space-y-2 text-sm text-steel">
+            <li>• Response time under 60 seconds</li>
+            <li>• After-hours coverage via WhatsApp AI</li>
+            <li>• Bookings created automatically</li>
+          </ul>
+        </article>
+
+        <article className="rounded-2xl border border-tide/20 bg-tide/5 p-6">
+          <h2 className="text-xl font-semibold text-coal">What your team does differently</h2>
+          <ul className="mt-3 space-y-2 text-sm text-steel">
+            <li>• Work from one inbox</li>
+            <li>• Follow-up prompts for every lead</li>
+            <li>• Structured booking workflow</li>
+          </ul>
+        </article>
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2">
         {screens.map((screen) => (
           <article key={screen.title} className="rounded-2xl border border-steel/12 bg-white p-6 shadow-sm">
             <h2 className="text-balance text-xl font-semibold text-coal">{screen.title}</h2>

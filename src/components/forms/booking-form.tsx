@@ -33,6 +33,7 @@ type BookingResponse = {
 export function BookingForm({ prefill }: { prefill?: PrefillData }) {
   const [slots, setSlots] = useState<Slot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(true);
+  const [slotsError, setSlotsError] = useState(false);
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [success, setSuccess] = useState<BookingResponse | null>(null);
@@ -76,6 +77,7 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
         }
       } catch (err) {
         if (active) {
+          setSlotsError(true);
           setError(err instanceof Error ? err.message : "Could not load available slots.");
         }
       } finally {
@@ -188,21 +190,6 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
           />
         </Field>
 
-        <Field label="Brand" required>
-          <select
-            value={form.brand}
-            onChange={(event) => setForm((prev) => ({ ...prev, brand: event.target.value }))}
-            className="input"
-            required
-          >
-            {BRANDS.filter((brand) => brand !== "All").map((brand) => (
-              <option key={brand} value={brand}>
-                {brand}
-              </option>
-            ))}
-          </select>
-        </Field>
-
         <Field label="Contact person" required>
           <input
             required
@@ -234,34 +221,24 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
           />
         </Field>
 
-        <Field label="Province" required>
+        <Field label="Brand" required>
           <select
-            value={form.province}
-            onChange={(event) => setForm((prev) => ({ ...prev, province: event.target.value }))}
+            value={form.brand}
+            onChange={(event) => setForm((prev) => ({ ...prev, brand: event.target.value }))}
             className="input"
             required
           >
-            {PROVINCES.map((province) => (
-              <option key={province} value={province}>
-                {province}
+            {BRANDS.filter((brand) => brand !== "All").map((brand) => (
+              <option key={brand} value={brand}>
+                {brand}
               </option>
             ))}
           </select>
         </Field>
 
-        <Field label="City" required>
-          <input
-            required
-            value={form.city}
-            onChange={(event) => setForm((prev) => ({ ...prev, city: event.target.value }))}
-            className="input"
-            placeholder="City"
-          />
-        </Field>
-
         <Field label="Preferred date/time" required>
           {loadingSlots ? (
-            <div className="input flex items-center text-sm text-steel">Loading available slots...</div>
+            <div className="input flex items-center text-sm text-steel">Loading available slots…</div>
           ) : slots.length > 0 ? (
             <select
               required
@@ -290,6 +267,20 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
         </Field>
       </div>
 
+      {slotsError ? (
+        <div className="rounded-xl bg-amber-50 p-3 text-sm text-amber-800">
+          <p>Could not load available slots.</p>
+          <a
+            href={waLink(AUTORA_WHATSAPP, "Hi AUTORA, I'd like to book a 15-minute dealer audit.")}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-2 inline-flex rounded-full bg-[#25D366] px-4 py-2 text-xs font-semibold text-black"
+          >
+            Tap to WhatsApp us now
+          </a>
+        </div>
+      ) : null}
+
       <Field label="Notes (optional)">
         <textarea
           value={form.notes}
@@ -308,6 +299,10 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
       >
         {isSubmitting ? "Booking..." : "Confirm Session"}
       </button>
+
+      <p className="text-center text-xs text-steel">
+        No obligation. Operational review only.
+      </p>
 
       <p className="text-xs text-steel">
         Optional WhatsApp confirmation available after submission. For direct chat now, use {" "}

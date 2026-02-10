@@ -119,7 +119,7 @@ export function ContactForm() {
       </Field>
 
       {error ? <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
-      {success ? <p className="rounded-xl bg-green-50 p-3 text-pretty text-sm text-green-700">Thanks. We will contact you shortly.</p> : null}
+      {success ? <p className="rounded-xl bg-green-50 p-3 text-pretty text-sm text-green-700">Thanks — we&apos;ll reply within 24 hours.</p> : null}
 
       <button
         type="submit"

@@ -11,7 +11,7 @@ export function CtaBanner() {
         In 15 minutes, we map response speed, booking flow, and follow-up gaps across your sales team.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
-        <ButtonLink href="/book">Book Your Free Audit</ButtonLink>
+        <ButtonLink href="/book">Book Free 15-Minute Dealer Audit</ButtonLink>
         <ButtonLink href="/pricing" variant="ghost" className="border-white/25 bg-transparent text-white hover:bg-white/10">
           View Pricing
         </ButtonLink>
