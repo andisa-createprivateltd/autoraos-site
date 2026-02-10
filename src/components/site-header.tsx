@@ -49,7 +49,7 @@ export function SiteHeader() {
             <ButtonLink href="/os/login" variant="ghost">
               Login
             </ButtonLink>
-            <ButtonLink href="/book">Free Audit</ButtonLink>
+            <ButtonLink href="/book">Book Audit</ButtonLink>
           </div>
         </div>
 
@@ -75,7 +75,7 @@ export function SiteHeader() {
                 Login
               </ButtonLink>
               <ButtonLink href="/book" className="mt-2 w-full">
-                Free Audit
+                Book Audit
               </ButtonLink>
             </div>
           </div>

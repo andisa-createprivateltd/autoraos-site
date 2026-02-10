@@ -86,13 +86,11 @@ export default function FounderNarrativePage() {
 
       <section className="rounded-3xl border border-ember/20 bg-[#fffaf6] p-6 shadow-sm">
         <h2 className="text-2xl font-semibold text-coal">Next 7 Days</h2>
-        <ol className="mt-4 space-y-2 text-sm text-steel">
-          {sevenDayPlan.map((item, idx) => (
-            <li key={item}>
-              {idx + 1}. {item}
-            </li>
+        <ul className="mt-4 space-y-2 text-sm text-steel">
+          {sevenDayPlan.map((item) => (
+            <li key={item}>• {item}</li>
           ))}
-        </ol>
+        </ul>
       </section>
     </div>
   );

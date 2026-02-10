@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
-import { AUTORA_WHATSAPP, BRANDS, PROVINCES } from "@/lib/constants";
+import { AUTORA_WHATSAPP, BRANDS } from "@/lib/constants";
 import { formatDateTime, waLink } from "@/lib/utils";
 
 type PrefillData = {
@@ -43,11 +43,6 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
     contactPerson: "",
     phone: "",
     email: "",
-    province:
-      prefill?.province && PROVINCES.includes(prefill.province as (typeof PROVINCES)[number])
-        ? prefill.province
-        : "Gauteng",
-    city: prefill?.city || "",
     preferredDateTime: "",
     notes: "",
     honeypot: ""
@@ -165,6 +160,7 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
         <p className="text-xs uppercase tracking-[0.22em] text-tide">Audit Session</p>
         <h2 className="mt-2 text-balance text-2xl font-semibold text-coal">{summaryText}</h2>
         <p className="mt-2 text-pretty text-sm text-steel">Choose an available 15-minute slot and share your dealership details.</p>
+        <p className="mt-2 text-pretty text-xs text-steel">No obligation. Operational review only.</p>
       </div>
 
       <input
@@ -234,34 +230,21 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
           />
         </Field>
 
-        <Field label="Province" required>
-          <select
-            value={form.province}
-            onChange={(event) => setForm((prev) => ({ ...prev, province: event.target.value }))}
-            className="input"
-            required
-          >
-            {PROVINCES.map((province) => (
-              <option key={province} value={province}>
-                {province}
-              </option>
-            ))}
-          </select>
-        </Field>
-
-        <Field label="City" required>
-          <input
-            required
-            value={form.city}
-            onChange={(event) => setForm((prev) => ({ ...prev, city: event.target.value }))}
-            className="input"
-            placeholder="City"
-          />
-        </Field>
-
         <Field label="Preferred date/time" required>
           {loadingSlots ? (
             <div className="input flex items-center text-sm text-steel">Loading available slots...</div>
+          ) : error ? (
+            <div className="space-y-2">
+              <div className="input flex items-center text-sm text-red-600">Failed to load slots</div>
+              <a
+                href={`https://wa.me/${AUTORA_WHATSAPP}?text=${encodeURIComponent("Hi AUTORA, I'd like to book an audit call.")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[#25D366] px-4 py-2 text-xs font-semibold text-black"
+              >
+                Book via WhatsApp instead
+              </a>
+            </div>
           ) : slots.length > 0 ? (
             <select
               required
@@ -276,16 +259,26 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
               ))}
             </select>
           ) : (
-            <input
-              type="datetime-local"
-              required
-              className="input"
-              onChange={(event) => {
-                const local = event.target.value;
-                const iso = local ? new Date(local).toISOString() : "";
-                setForm((prev) => ({ ...prev, preferredDateTime: iso }));
-              }}
-            />
+            <div className="space-y-2">
+              <input
+                type="datetime-local"
+                required
+                className="input"
+                onChange={(event) => {
+                  const local = event.target.value;
+                  const iso = local ? new Date(local).toISOString() : "";
+                  setForm((prev) => ({ ...prev, preferredDateTime: iso }));
+                }}
+              />
+              <a
+                href={`https://wa.me/${AUTORA_WHATSAPP}?text=${encodeURIComponent("Hi AUTORA, I'd like to book an audit call.")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex w-full items-center justify-center rounded-full bg-[#25D366] px-4 py-2 text-xs font-semibold text-black"
+              >
+                Or book via WhatsApp
+              </a>
+            </div>
           )}
         </Field>
       </div>

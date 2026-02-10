@@ -15,6 +15,15 @@ export default function DealershipsNearMePage() {
           Locate nearby Chery, Haval, Omoda, Jaecoo, BYD, and GWM dealerships using live Google Places data.
           You can select a dealership and instantly personalize your booking flow.
         </p>
+        <div className="mt-6 rounded-2xl border border-ember/20 bg-gradient-to-br from-ember/5 to-white p-5">
+          <p className="text-sm font-semibold text-coal">Want this installed for your dealership?</p>
+          <a
+            href="/book"
+            className="mt-3 inline-flex rounded-full bg-ember px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-ember/90"
+          >
+            Book Free 15-Minute Audit
+          </a>
+        </div>
       </section>
 
       <DealershipNearMe />
