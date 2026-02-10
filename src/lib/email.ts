@@ -1,3 +1,14 @@
+/**
+ * Email notification module for AUTORA booking and contact forms
+ * 
+ * Booking emails are sent to:
+ * - Customer: Confirmation email with calendar invite (.ics file)
+ * - Admin: Full booking details sent to ADMIN_EMAIL (andisa@createprivateltd.com)
+ * 
+ * Requires:
+ * - SENDGRID_API_KEY: SendGrid API key for email delivery
+ * - ADMIN_EMAIL: Recipient for booking notifications (andisa@createprivateltd.com)
+ */
 import sgMail from "@sendgrid/mail";
 import { env } from "@/lib/env";
 import { AUTORA_WHATSAPP, PARENT_COMPANY_NAME, PLATFORM_NAME } from "@/lib/constants";
@@ -49,6 +60,8 @@ export async function sendBookingEmails(payload: {
     ]
   };
 
+  // Admin notification with all booking details
+  // Recipient is configured via ADMIN_EMAIL environment variable (should be andisa@createprivateltd.com)
   const adminMsg = {
     to: env.ADMIN_EMAIL as string,
     from: env.ADMIN_EMAIL as string,
