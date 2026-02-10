@@ -37,7 +37,7 @@ export default function HomePage() {
           Created specifically for new-vehicle dealerships, with a focus on Chinese automotive brands.
         </p>
         <p className="relative z-10 mt-3 inline-flex rounded-full border border-steel/16 bg-mist/55 px-3 py-1 text-xs font-semibold uppercase tracking-[0.11em] text-steel">
-          Private beta now onboarding dealership partners in Gauteng
+          Now serving dealership partners across South Africa
         </p>
 
         <div className="relative z-10 mt-8 flex flex-wrap gap-3">

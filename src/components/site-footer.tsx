@@ -13,7 +13,7 @@ export function SiteFooter() {
             bookings, and improve conversion outcomes.
           </p>
           <p className="mt-3 text-xs uppercase tracking-[0.12em] text-white/65">
-            Private Beta • South Africa • Automotive-only platform
+            South Africa • Automotive-only platform
           </p>
           <p className="mt-4 text-xs text-white/60">© {new Date().getFullYear()} {PARENT_COMPANY_NAME}. All rights reserved.</p>
         </div>
