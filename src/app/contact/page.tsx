@@ -8,10 +8,10 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_1.1fr]">
+    <div className="grid gap-8 md:grid-cols-[1fr_1.1fr]">
       <section className="max-w-2xl">
         <p className="text-xs uppercase tracking-[0.15em] text-tide">Contact</p>
-        <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">Speak with {PLATFORM_NAME}</h1>
+        <h1 className="mt-2 text-balance text-2xl font-semibold text-coal sm:text-3xl md:text-5xl">Speak with {PLATFORM_NAME}</h1>
         <p className="mt-4 text-pretty text-base leading-relaxed text-steel">
           Share your dealership response and conversion targets. We will reply with practical platform-fit next steps. {PLATFORM_SUBSIDIARY_LINE}.
         </p>

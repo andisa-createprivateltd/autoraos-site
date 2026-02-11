@@ -26,7 +26,7 @@ export default function BookPage({
     <div className="grid gap-8 lg:grid-cols-[1.1fr_1fr]">
       <section className="max-w-2xl">
         <p className="text-xs uppercase tracking-[0.16em] text-tide">Book Appointment</p>
-        <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">15-minute Growth & Response Audit</h1>
+        <h1 className="mt-2 text-balance text-2xl font-semibold text-coal sm:text-3xl md:text-5xl">15-minute Growth & Response Audit</h1>
         <p className="mt-4 text-pretty text-base leading-relaxed text-steel">
           We review lead handling speed, WhatsApp conversion flow, and booking operations, then share practical next actions.
         </p>

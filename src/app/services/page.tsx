@@ -43,7 +43,7 @@ export default function ServicesPage() {
     <div className="space-y-12">
       <section className="max-w-3xl">
         <p className="text-xs uppercase tracking-[0.15em] text-tide">Platform Modules</p>
-        <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">AUTORA is infrastructure, not a marketing package</h1>
+        <h1 className="mt-2 text-balance text-2xl font-semibold text-coal sm:text-3xl md:text-5xl">AUTORA is infrastructure, not a marketing package</h1>
         <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-steel">
           Every module exists to protect response speed, booking consistency, and dealership conversion outcomes.
         </p>

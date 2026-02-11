@@ -36,7 +36,7 @@ export default function FounderNarrativePage() {
     <div className="space-y-10">
       <section className="max-w-3xl">
         <p className="text-xs uppercase tracking-[0.15em] text-tide">Founder Narrative</p>
-        <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">Investor and acquirer story in 60 seconds</h1>
+        <h1 className="mt-2 text-balance text-2xl font-semibold text-coal sm:text-3xl md:text-5xl">Investor and acquirer story in 60 seconds</h1>
       </section>
 
       <section className="rounded-3xl border border-steel/12 bg-white p-7 shadow-soft">
