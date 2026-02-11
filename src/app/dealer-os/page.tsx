@@ -70,7 +70,7 @@ export default function DealerOsPage() {
     <div className="space-y-10">
       <section className="max-w-3xl">
         <p className="text-xs uppercase tracking-[0.15em] text-tide">AUTORA OS V1</p>
-        <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">Revenue control system for dealerships</h1>
+        <h1 className="mt-2 text-balance text-2xl font-semibold text-coal sm:text-3xl md:text-5xl">Revenue control system for dealerships</h1>
         <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-steel">
           AUTORA OS is intentionally narrow in V1: WhatsApp, CRM workflow, booking conversion, and operational visibility.
         </p>

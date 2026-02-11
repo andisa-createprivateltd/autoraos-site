@@ -44,7 +44,7 @@ export default function PricingPage() {
     <div className="space-y-12">
       <section className="max-w-3xl">
         <p className="text-xs uppercase tracking-[0.15em] text-tide">Pricing</p>
-        <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">
+        <h1 className="mt-2 text-balance text-2xl font-semibold text-coal sm:text-3xl md:text-5xl">
           The Operating System for Dealership Leads & WhatsApp Sales
         </h1>
         <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-steel">

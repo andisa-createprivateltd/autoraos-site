@@ -11,7 +11,7 @@ export default function AboutPage() {
       {/* Hero Section */}
       <section className="max-w-4xl space-y-6">
         <p className="text-xs uppercase tracking-[0.15em] text-tide">About {PLATFORM_NAME}</p>
-        <h1 className="text-balance text-4xl font-semibold text-coal md:text-5xl">
+        <h1 className="text-balance text-2xl font-semibold text-coal sm:text-3xl md:text-5xl">
           From agency distribution to vertical SaaS infrastructure
         </h1>
         <p className="max-w-3xl text-pretty text-base leading-relaxed text-steel">

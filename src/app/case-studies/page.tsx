@@ -28,7 +28,7 @@ export default function CaseStudiesPage() {
     <div className="space-y-10">
       <section className="max-w-3xl">
         <p className="text-xs uppercase tracking-[0.15em] text-tide">Case Studies</p>
-        <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">Proof framework (results coming soon)</h1>
+        <h1 className="mt-2 text-balance text-2xl font-semibold text-coal sm:text-3xl md:text-5xl">Proof framework (results coming soon)</h1>
         <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-steel">
           We are actively building measurable dealership case studies. Cards below are placeholders for upcoming live outcomes.
         </p>

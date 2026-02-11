@@ -3,8 +3,8 @@ import { NAV_LINKS, PARENT_COMPANY_NAME, PLATFORM_NAME, PLATFORM_SUBSIDIARY_LINE
 
 export function SiteFooter() {
   return (
-    <footer className="mt-20 border-t border-steel/10 bg-coal text-white">
-      <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 md:grid-cols-[2fr_1fr] md:px-6">
+    <footer className="mt-12 border-t border-steel/10 bg-coal text-white sm:mt-20">
+      <div className="mx-auto grid w-full max-w-7xl gap-6 px-4 py-8 sm:gap-8 sm:py-12 md:grid-cols-[2fr_1fr] md:px-6">
         <div>
           <p className="text-lg font-semibold">{PLATFORM_NAME}</p>
           <p className="mt-1 text-xs uppercase tracking-[0.12em] text-white/70">{PLATFORM_SUBSIDIARY_LINE}</p>
