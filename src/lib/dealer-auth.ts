@@ -5,6 +5,8 @@ export type DealerSession = {
   email: string;
   name: string;
   role: DealerRole;
+  dealerScope?: string[];
+  defaultDealerId?: string;
   iat: number;
   exp: number;
 };
@@ -14,6 +16,8 @@ type DealerCredential = {
   password: string;
   role: DealerRole;
   name: string;
+  dealerScope?: string[];
+  defaultDealerId?: string;
 };
 
 export const SESSION_COOKIE_NAME = "dealer_os_session";
@@ -26,23 +30,71 @@ function getSessionSecret() {
   throw new Error("SESSION_SECRET must be set to a 32+ character value.");
 }
 
+function parseDealerScope(value?: string) {
+  if (!value) return [];
+  return Array.from(
+    new Set(
+      value
+        .split(",")
+        .map((entry) => entry.trim())
+        .filter(Boolean)
+    )
+  );
+}
+
 function getDealerCredentials(): DealerCredential[] {
   function resolveCredential(params: {
     role: DealerRole;
     name: string;
     emailEnv: string;
     passwordEnv: string;
-  }) {
+    dealerScopeEnv?: string;
+    defaultDealerEnv?: string;
+  }): DealerCredential | null {
     const email = process.env[params.emailEnv];
     const password = process.env[params.passwordEnv];
 
     if (!email || !password) return null;
+
+    const dealerScope = parseDealerScope(params.dealerScopeEnv ? process.env[params.dealerScopeEnv] : undefined);
+    const requestedDefaultDealerId = params.defaultDealerEnv ? process.env[params.defaultDealerEnv]?.trim() : "";
+    const defaultDealerId =
+      requestedDefaultDealerId && dealerScope.includes(requestedDefaultDealerId)
+        ? requestedDefaultDealerId
+        : dealerScope[0];
+
     return {
       email: email.toLowerCase(),
       password,
       role: params.role,
-      name: params.name
-    } satisfies DealerCredential;
+      name: params.name,
+      dealerScope: dealerScope.length ? dealerScope : undefined,
+      defaultDealerId: defaultDealerId || undefined
+    };
+  }
+
+  function resolveJohnOwnerCredential(): DealerCredential | null {
+    const email = (process.env.JOHN_OWNER_EMAIL || "john.johnson@autoraos.company").trim().toLowerCase();
+    const password =
+      process.env.JOHN_OWNER_PASSWORD ||
+      process.env.DEALER_ADMIN_PASSWORD ||
+      "JohnOwner@2026";
+
+    const dealerScope = parseDealerScope(process.env.JOHN_OWNER_DEALER_IDS || "demo-store-01,demo-store-02");
+    const requestedDefaultDealerId = process.env.JOHN_OWNER_DEFAULT_DEALER_ID?.trim() || "";
+    const defaultDealerId =
+      requestedDefaultDealerId && dealerScope.includes(requestedDefaultDealerId)
+        ? requestedDefaultDealerId
+        : dealerScope[0];
+
+    return {
+      email,
+      password,
+      role: "dealer_admin",
+      name: process.env.JOHN_OWNER_NAME || "John Johnson",
+      dealerScope: dealerScope.length ? dealerScope : undefined,
+      defaultDealerId: defaultDealerId || undefined
+    };
   }
 
   const credentials = [
@@ -58,6 +110,7 @@ function getDealerCredentials(): DealerCredential[] {
       emailEnv: "PLATFORM_SUPPORT_EMAIL",
       passwordEnv: "PLATFORM_SUPPORT_PASSWORD"
     }),
+    resolveJohnOwnerCredential(),
     resolveCredential({
       role: "dealer_admin",
       name: "Dealer Admin",
@@ -146,21 +199,44 @@ export function verifySessionToken(token?: string | null) {
   if (!["platform_owner", "platform_support", "dealer_admin", "dealer_sales", "dealer_marketing"].includes(payload.role)) {
     return null;
   }
+
+  const dealerScope = Array.isArray(payload.dealerScope)
+    ? Array.from(
+        new Set(
+          payload.dealerScope
+            .map((value) => (typeof value === "string" ? value.trim() : ""))
+            .filter(Boolean)
+        )
+      )
+    : [];
+  const defaultDealerId = typeof payload.defaultDealerId === "string" ? payload.defaultDealerId.trim() : "";
+
+  if (dealerScope.length) {
+    payload.dealerScope = dealerScope;
+    payload.defaultDealerId = dealerScope.includes(defaultDealerId) ? defaultDealerId : dealerScope[0];
+  } else {
+    delete payload.dealerScope;
+    delete payload.defaultDealerId;
+  }
+
   return payload;
 }
 
 export function authenticateDealer(email: string, password: string) {
   const normalizedEmail = email.trim().toLowerCase();
+  const normalizedPassword = password.trim();
   const credentials = getDealerCredentials();
   const credential = credentials.find((item) => item.email === normalizedEmail);
 
   if (!credential) return null;
-  if (credential.password !== password) return null;
+  if (credential.password.trim() !== normalizedPassword) return null;
 
   return {
     email: credential.email,
     name: credential.name,
-    role: credential.role
+    role: credential.role,
+    dealerScope: credential.dealerScope,
+    defaultDealerId: credential.defaultDealerId
   };
 }
 
@@ -180,7 +256,13 @@ function getScreenFromPath(path: string) {
   const normalized = path.split("?")[0];
   const segments = normalized.split("/").filter(Boolean);
   if (segments[0] !== "os") return null;
-  return segments[1] || "dashboard";
+  const screen = segments[1] || "dashboard";
+  if (screen === "inbox") return "conversations";
+  if (screen === "queue") return "leads";
+  if (screen === "execution") return "bookings";
+  if (screen === "policy-engine") return "assistant";
+  if (screen === "visibility") return "insights";
+  return screen;
 }
 
 export function resolvePostLoginPath(role: DealerRole, requestedPath?: string) {
