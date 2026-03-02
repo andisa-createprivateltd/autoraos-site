@@ -18,17 +18,17 @@ const QUICK_REPLIES = [
 
 const STATUS_OPTIONS = [
   { value: "new", label: "New" },
-  { value: "contacted", label: "Hot" },
+  { value: "contacted", label: "Contacted" },
+  { value: "qualified", label: "Qualified" },
   { value: "booked", label: "Booked" },
-  { value: "visited", label: "Visited" },
-  { value: "sold", label: "Sold" },
+  { value: "completed", label: "Completed" },
   { value: "lost", label: "Lost" }
 ] as const;
 
 type ConversationControlsProps = {
   conversationId: string;
   leadId: string;
-  currentStatus: "New" | "Contacted" | "Booked" | "Visited" | "Sold" | "Lost";
+  currentStatus: "New" | "Contacted" | "Qualified" | "Booked" | "Completed" | "Lost" | "Visited" | "Sold";
   assignedUserId: string | null;
   assignableUsers: AssignableUser[];
   aiEnabled: boolean;
@@ -36,6 +36,7 @@ type ConversationControlsProps = {
 };
 
 function normalizeStatus(status: ConversationControlsProps["currentStatus"]) {
+  if (status === "Visited" || status === "Sold") return "completed";
   return status.toLowerCase();
 }
 

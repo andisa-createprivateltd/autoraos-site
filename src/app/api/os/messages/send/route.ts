@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { recordAutoraAuditLog } from "@/lib/autora-audit";
+import { hasSupabase } from "@/lib/env";
 import { getSupabaseClient } from "@/lib/supabase";
 import { osSendMessageSchema } from "@/lib/validation";
 import { requireWebSessionAuth } from "@/lib/web-api-auth";
@@ -50,7 +52,7 @@ async function sendWhatsAppViaMeta(phone: string, content: string): Promise<Meta
 }
 
 export async function POST(request: Request) {
-  const auth = requireWebSessionAuth({
+  const auth = await requireWebSessionAuth({
     allowedRoles: [
       "platform_owner",
       "platform_support",
@@ -79,12 +81,17 @@ export async function POST(request: Request) {
   }
 
   const input = parsed.data;
+
+  if (!hasSupabase()) {
+    return NextResponse.json({ message: "Canonical data path is not configured." }, { status: 503 });
+  }
+
   const supabase = getSupabaseClient();
 
   try {
     const conversationResult = await supabase
-      .from("conversations")
-      .select("id,lead_id,dealer_id")
+      .from("autora_conversations")
+      .select("id,lead_id,dealership_id,group_id")
       .eq("id", input.conversation_id)
       .limit(1)
       .maybeSingle();
@@ -98,7 +105,7 @@ export async function POST(request: Request) {
     }
 
     const leadResult = await supabase
-      .from("leads")
+      .from("autora_leads")
       .select("id,phone")
       .eq("id", input.lead_id)
       .limit(1)
@@ -110,16 +117,13 @@ export async function POST(request: Request) {
 
     const metaResult = await sendWhatsAppViaMeta(leadResult.data.phone as string, input.content);
 
-    const insertResult = await supabase.from("messages").insert({
-      dealer_id: conversationResult.data.dealer_id,
+    const insertResult = await supabase.from("autora_messages").insert({
+      group_id: (conversationResult.data as { group_id?: string | null }).group_id || null,
+      dealership_id: conversationResult.data.dealership_id,
       conversation_id: input.conversation_id,
       lead_id: input.lead_id,
       direction: "outbound",
-      sender_type: "human",
-      sender_user_id: null,
-      content: input.content,
-      message_type: "text",
-      provider_message_id: metaResult.providerMessageId
+      body: input.content
     });
 
     if (insertResult.error) {
@@ -127,9 +131,27 @@ export async function POST(request: Request) {
     }
 
     await supabase
-      .from("conversations")
-      .update({ last_message_at: new Date().toISOString() })
+      .from("autora_conversations")
+      .update({
+        last_outbound_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
       .eq("id", input.conversation_id);
+
+    await recordAutoraAuditLog({
+      role: auth.session.role,
+      email: auth.session.email,
+      action: "message_send",
+      entityType: "conversation",
+      entityId: input.conversation_id,
+      dealershipId: conversationResult.data.dealership_id as string,
+      groupId: (conversationResult.data as { group_id?: string | null }).group_id || null,
+      metadata: {
+        lead_id: input.lead_id,
+        provider_mode: metaResult.mode,
+        provider_message_id: metaResult.providerMessageId
+      }
+    });
 
     return NextResponse.json({
       success: true,

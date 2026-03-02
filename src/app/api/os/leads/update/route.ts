@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { recordAutoraAuditLog } from "@/lib/autora-audit";
+import { hasSupabase } from "@/lib/env";
 import { getSupabaseClient } from "@/lib/supabase";
 import { osLeadUpdateSchema } from "@/lib/validation";
 import { requireWebSessionAuth } from "@/lib/web-api-auth";
 
 export async function POST(request: Request) {
-  const auth = requireWebSessionAuth({
+  const auth = await requireWebSessionAuth({
     allowedRoles: [
       "platform_owner",
       "platform_support",
@@ -40,27 +42,41 @@ export async function POST(request: Request) {
     );
   }
 
+  if (!hasSupabase()) {
+    return NextResponse.json({ message: "Canonical data path is not configured." }, { status: 503 });
+  }
+
   try {
     const supabase = getSupabaseClient();
     const updatePayload: Record<string, unknown> = {
       last_activity_at: new Date().toISOString()
     };
 
-    if (input.status) {
-      updatePayload.status = input.status;
-    }
-    if (input.assigned_user_id !== undefined) {
-      updatePayload.assigned_user_id = input.assigned_user_id;
-    }
+    if (input.status) updatePayload.status = input.status;
+    if (input.assigned_user_id !== undefined) updatePayload.assigned_to = input.assigned_user_id;
 
     const updateResult = await supabase
-      .from("leads")
+      .from("autora_leads")
       .update(updatePayload)
       .eq("id", input.lead_id)
-      .select("id")
+      .select("id,group_id,dealership_id,assigned_to,status")
       .single();
 
     if (updateResult.error) throw updateResult.error;
+
+    await recordAutoraAuditLog({
+      role: auth.session.role,
+      email: auth.session.email,
+      action: "lead_update",
+      entityType: "lead",
+      entityId: input.lead_id,
+      dealershipId: updateResult.data.dealership_id as string,
+      groupId: updateResult.data.group_id as string,
+      metadata: {
+        assigned_user_id: updateResult.data.assigned_to,
+        status: updateResult.data.status
+      }
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {

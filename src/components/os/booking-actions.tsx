@@ -41,10 +41,18 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
         <button
           type="button"
           onClick={() => runAction("confirm")}
-          className="rounded-full border border-steel/25 px-2 py-1 text-xs font-semibold text-coal hover:bg-mist/60 disabled:opacity-50"
+          className="rounded-full bg-coal px-3 py-1.5 text-xs font-semibold text-white hover:bg-coal/90 disabled:opacity-50"
           disabled={pending}
         >
           Confirm
+        </button>
+        <button
+          type="button"
+          onClick={() => runAction("complete")}
+          className="rounded-full bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+          disabled={pending}
+        >
+          Mark Completed
         </button>
         <button
           type="button"
@@ -56,16 +64,8 @@ export function BookingActions({ bookingId }: { bookingId: string }) {
         </button>
         <button
           type="button"
-          onClick={() => runAction("complete")}
-          className="rounded-full border border-steel/25 px-2 py-1 text-xs font-semibold text-coal hover:bg-mist/60 disabled:opacity-50"
-          disabled={pending}
-        >
-          Mark Completed
-        </button>
-        <button
-          type="button"
           onClick={() => runAction("no_show")}
-          className="rounded-full border border-steel/25 px-2 py-1 text-xs font-semibold text-coal hover:bg-mist/60 disabled:opacity-50"
+          className="rounded-full border border-red-200 bg-red-50 px-2 py-1 text-xs font-semibold text-red-800 hover:bg-red-100 disabled:opacity-50"
           disabled={pending}
         >
           No-show

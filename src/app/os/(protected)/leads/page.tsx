@@ -1,6 +1,11 @@
 import Link from "next/link";
+import { QueueBulkActions } from "@/components/os/queue-bulk-actions";
 import { SlaCountdown } from "@/components/os/sla-countdown";
-import { getCanonicalDealerOptions, getCanonicalQueueRows } from "@/lib/autora-dashboard";
+import {
+  getCanonicalAssignableUsers,
+  getCanonicalDealerOptions,
+  getCanonicalQueueRows
+} from "@/lib/autora-dashboard";
 import { requireDealerSession, sanitizeDealerIdForSession } from "@/lib/dealer-session";
 
 type LeadsPageSearchParams = {
@@ -85,7 +90,7 @@ export default async function OsLeadsPage({
   const leadId = normalizeParam(params.lead);
   const page = normalizePage(params.page);
   const dealerId = sanitizeDealerIdForSession(session, requestedDealerId === "all" ? undefined : requestedDealerId);
-  const [dealerOptions, queueData] = await Promise.all([
+  const [dealerOptions, queueData, assignableUsers] = await Promise.all([
     getCanonicalDealerOptions(session),
     getCanonicalQueueRows(session, {
       dealerId,
@@ -96,7 +101,8 @@ export default async function OsLeadsPage({
       leadId: leadId === "all" ? undefined : leadId,
       page,
       pageSize: 25
-    })
+    }),
+    getCanonicalAssignableUsers(session, dealerId)
   ]);
 
   if (!queueData) {
@@ -179,6 +185,17 @@ export default async function OsLeadsPage({
           </button>
         </form>
       </section>
+
+      {session.role !== "dealer_sales" ? (
+        <QueueBulkActions
+          leads={queueData.rows.map((row) => ({
+            id: row.id,
+            name: row.name,
+            dealershipName: row.dealershipName
+          }))}
+          assignableUsers={assignableUsers.map((user) => ({ id: user.id, name: user.name }))}
+        />
+      ) : null}
 
       <section className="rounded-3xl border border-steel/12 bg-white p-6 shadow-sm">
         <div className="mb-4 flex items-center justify-between">

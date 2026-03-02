@@ -1,10 +1,16 @@
 import { z } from "zod";
 import { BRANDS, PROVINCES } from "@/lib/constants";
+import { normalizePhone } from "@/lib/utils";
 
 const brandValues = BRANDS.filter((brand) => brand !== "All") as [
   (typeof BRANDS)[number],
   ...(typeof BRANDS)[number][]
 ];
+
+function isValidZaPhone(value: string) {
+  const normalized = normalizePhone(value).replace(/^\+/, "");
+  return /^(27\d{9}|0\d{9})$/.test(normalized);
+}
 
 export const bookingSchema = z.object({
   dealershipName: z.string().min(2, "Dealership name is required"),
@@ -21,11 +27,15 @@ export const bookingSchema = z.object({
 });
 
 export const contactSchema = z.object({
-  dealershipName: z.string().optional(),
-  contactPerson: z.string().min(2, "Name is required"),
-  phone: z.string().min(8, "Phone number is required"),
+  dealershipName: z.string().min(2, "Dealership or group name is required"),
+  groupSize: z.enum(["1", "2-5", "6-20", "20+"] as const),
+  role: z.string().min(2, "Role is required"),
+  phone: z.string().refine(isValidZaPhone, "Enter a valid South African phone number"),
   email: z.string().email("Enter a valid email address"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  message: z.string().min(20, "Message must be at least 20 characters"),
+  consent: z.literal(true, {
+    errorMap: () => ({ message: "Consent is required" })
+  }),
   honeypot: z.string().max(0).optional().default("")
 });
 
@@ -54,22 +64,9 @@ export const deviceTokenSchema = z.object({
   platform: z.literal("ios")
 });
 
-const leadStatusValues = [
-  "new",
-  "contacted",
-  "booked",
-  "visited",
-  "sold",
-  "lost"
-] as const;
+const leadStatusValues = ["new", "contacted", "qualified", "booked", "completed", "lost"] as const;
 
-const bookingActionValues = [
-  "confirm",
-  "reschedule",
-  "complete",
-  "no_show",
-  "send_reminder"
-] as const;
+const bookingActionValues = ["confirm", "reschedule", "complete", "no_show", "send_reminder"] as const;
 
 export const osLeadUpdateSchema = z.object({
   lead_id: z.string().uuid("Invalid lead ID"),
@@ -93,6 +90,12 @@ export const osHandoffSchema = z.object({
 export const osBookingActionSchema = z.object({
   booking_id: z.string().uuid("Invalid booking ID"),
   action: z.enum(bookingActionValues)
+});
+
+export const osQueueBulkActionSchema = z.object({
+  lead_ids: z.array(z.string().uuid("Invalid lead ID")).min(1, "Select at least one lead"),
+  action: z.enum(["assign_selected", "mark_contacted", "send_template_reminder"] as const),
+  assigned_user_id: z.string().uuid("Invalid user ID").nullable().optional()
 });
 
 export type BookingInput = z.infer<typeof bookingSchema>;

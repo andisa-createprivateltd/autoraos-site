@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
+import { recordAutoraAuditLog } from "@/lib/autora-audit";
+import { hasSupabase } from "@/lib/env";
 import { getSupabaseClient } from "@/lib/supabase";
 import { osHandoffSchema } from "@/lib/validation";
 import { requireWebSessionAuth } from "@/lib/web-api-auth";
 
 export async function POST(request: Request) {
-  const auth = requireWebSessionAuth({
+  const auth = await requireWebSessionAuth({
     allowedRoles: [
       "platform_owner",
       "platform_support",
@@ -34,11 +36,15 @@ export async function POST(request: Request) {
 
   const input = parsed.data;
 
+  if (!hasSupabase()) {
+    return NextResponse.json({ message: "Canonical data path is not configured." }, { status: 503 });
+  }
+
   try {
     const supabase = getSupabaseClient();
     const conversationResult = await supabase
-      .from("conversations")
-      .select("id,lead_id,dealer_id")
+      .from("autora_conversations")
+      .select("id,lead_id,dealership_id,group_id")
       .eq("id", input.conversation_id)
       .limit(1)
       .maybeSingle();
@@ -51,21 +57,48 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: "Lead mismatch for handoff." }, { status: 400 });
     }
 
-    const eventInsert = await supabase.from("ai_events").insert({
-      dealer_id: conversationResult.data.dealer_id,
-      lead_id: input.lead_id,
-      conversation_id: input.conversation_id,
-      event_type: "handoff",
-      success: true,
-      meta: {
+    const slaLookup = await supabase
+      .from("autora_operational_opportunities")
+      .select("sla_event_id")
+      .eq("conversation_id", input.conversation_id)
+      .limit(1)
+      .maybeSingle();
+
+    if (slaLookup.error) throw slaLookup.error;
+
+    if (slaLookup.data?.sla_event_id) {
+      const escalationInsert = await supabase.from("autora_sla_escalations").insert({
+        sla_event_id: slaLookup.data.sla_event_id,
+        group_id: (conversationResult.data as { group_id?: string | null }).group_id,
+        dealership_id: conversationResult.data.dealership_id,
+        stage: input.enabled ? 0 : 1,
+        escalation_target: input.enabled ? "ai" : "human",
+        action: input.enabled ? "ai_resume" : "handoff",
+        payload: {
+          enabled: input.enabled,
+          reason: input.reason || null,
+          by: auth.session.role,
+          by_email: auth.session.email
+        }
+      });
+
+      if (escalationInsert.error) throw escalationInsert.error;
+    }
+
+    await recordAutoraAuditLog({
+      role: auth.session.role,
+      email: auth.session.email,
+      action: "conversation_handoff_toggle",
+      entityType: "conversation",
+      entityId: input.conversation_id,
+      dealershipId: conversationResult.data.dealership_id as string,
+      groupId: (conversationResult.data as { group_id?: string | null }).group_id || null,
+      metadata: {
+        lead_id: input.lead_id,
         enabled: input.enabled,
-        reason: input.reason || null,
-        by: auth.session.role,
-        by_email: auth.session.email
+        reason: input.reason || null
       }
     });
-
-    if (eventInsert.error) throw eventInsert.error;
 
     return NextResponse.json({ success: true });
   } catch (error) {
