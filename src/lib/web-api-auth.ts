@@ -17,13 +17,16 @@ type WebSessionAuthSuccess = {
     email: string;
     name: string;
     role: DealerRole;
+    dealerScope?: string[];
+    defaultDealerId?: string;
   };
 };
 
-export function requireWebSessionAuth(options?: {
+export async function requireWebSessionAuth(options?: {
   allowedRoles?: DealerRole[];
-}): WebSessionAuthFailure | WebSessionAuthSuccess {
-  const token = cookies().get(SESSION_COOKIE_NAME)?.value;
+}): Promise<WebSessionAuthFailure | WebSessionAuthSuccess> {
+  const store = await cookies();
+  const token = store.get(SESSION_COOKIE_NAME)?.value;
   const session = verifySessionToken(token);
 
   if (!session) {
@@ -45,7 +48,9 @@ export function requireWebSessionAuth(options?: {
     session: {
       email: session.email,
       name: session.name,
-      role: session.role
+      role: session.role,
+      dealerScope: session.dealerScope,
+      defaultDealerId: session.defaultDealerId
     }
   };
 }

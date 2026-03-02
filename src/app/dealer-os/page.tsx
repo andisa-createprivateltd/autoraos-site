@@ -1,87 +1,52 @@
 import type { Metadata } from "next";
 import { ButtonLink } from "@/components/ui/button-link";
+import { buildPageMetadata } from "@/lib/site-metadata";
 
-export const metadata: Metadata = {
-  title: "AUTORA OS"
-};
+export const metadata: Metadata = buildPageMetadata({
+  title: "Dealer OS V1",
+  description:
+    "A concise view of what AUTORA OS V1 gives dealership teams: dashboard control, inbox execution, bookings, policy controls, and operational reporting.",
+  path: "/dealer-os"
+});
 
-const screens = [
+const v1Items = [
   {
-    title: "Login",
-    bullets: [
-      "platform_owner (all dealers + billing + logs + API keys)",
-      "platform_support (setup + ops; no billing/logs/API keys)",
-      "dealer_admin / dealer_sales / dealer_marketing"
-    ]
+    title: "Dashboard",
+    bullets: ["Revenue at risk", "SLA breaches", "Hot leads", "Bookings due today"]
   },
   {
-    title: "Dashboard (Money View)",
-    bullets: [
-      "New Leads (last 24h)",
-      "Response Time (avg)",
-      "Bookings Created",
-      "Missed Leads Alert",
-      "Conversion Snapshot (basic)"
-    ]
+    title: "Inbox",
+    bullets: ["WhatsApp-style threads", "Assignment and handoff", "Quick replies", "AI on or off"]
   },
   {
-    title: "Conversations (Core Screen)",
-    bullets: [
-      "WhatsApp-style inbox",
-      "One thread per lead",
-      "AI + human messages inline",
-      "Tags: New / Hot / Booked / Visited / Sold / Lost",
-      "Lead source label: Ads / Website / OEM"
-    ]
+    title: "Leads and bookings",
+    bullets: ["Reply, call, assign, and book actions", "Confirm, reschedule, no-show, reminder workflows"]
   },
   {
-    title: "Bookings",
-    bullets: [
-      "Test drives, appointments, call-backs",
-      "Calendar view",
-      "Auto confirmations",
-      "No-show reminders",
-      "Status: Booked / Completed / No-show"
-    ]
-  },
-  {
-    title: "AI Assistant (Admin)",
-    bullets: ["Business hours", "FAQs", "Booking rules", "Escalation logic handoff"]
-  },
-  {
-    title: "Insights (Minimal)",
-    bullets: ["Avg response time", "Leads vs bookings", "Missed after-hours leads"]
-  },
-  {
-    title: "Settings",
-    bullets: ["Users", "WhatsApp numbers", "Booking availability", "Billing plan"]
+    title: "Policy and governance",
+    bullets: ["Business hours", "FAQ content", "Escalation rules", "Audit reporting"]
   }
-] as const;
-
-const notInV1 = [
-  "White-labelling",
-  "Multi-language",
-  "Advanced analytics",
-  "Custom workflows"
 ] as const;
 
 export default function DealerOsPage() {
   return (
-    <div className="space-y-10">
-      <section className="max-w-3xl">
-        <p className="text-xs uppercase tracking-[0.15em] text-tide">AUTORA OS V1</p>
-        <h1 className="mt-2 text-balance text-4xl font-semibold text-coal md:text-5xl">Revenue control system for dealerships</h1>
-        <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-steel">
-          AUTORA OS is intentionally narrow in V1: WhatsApp, CRM workflow, booking conversion, and operational visibility.
+    <div className="page-motion space-y-10">
+      <section className="panel-dark p-7 md:p-9">
+        <p className="text-xs uppercase tracking-[0.16em] text-white/70">Dealer OS V1</p>
+        <h1 className="section-heading mt-2 text-balance text-4xl font-semibold md:text-5xl">
+          What you get in V1
+        </h1>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-white/82">
+          AUTORA OS V1 focuses on one job: keeping dealership lead handling disciplined across inbox, bookings, and management review.
         </p>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2">
-        {screens.map((screen) => (
-          <article key={screen.title} className="rounded-2xl border border-steel/12 bg-white p-6 shadow-sm">
-            <h2 className="text-balance text-xl font-semibold text-coal">{screen.title}</h2>
-            <ul className="mt-3 space-y-2 text-sm text-steel">
-              {screen.bullets.map((bullet) => (
+        {v1Items.map((item) => (
+          <article key={item.title} className="surface-card p-6">
+            <h2 className="section-heading text-xl font-semibold text-coal">{item.title}</h2>
+            <ul className="mt-4 space-y-2 text-sm text-steel">
+              {item.bullets.map((bullet) => (
                 <li key={bullet}>• {bullet}</li>
               ))}
             </ul>
@@ -89,22 +54,19 @@ export default function DealerOsPage() {
         ))}
       </section>
 
-      <section className="rounded-3xl border border-ember/20 bg-[#fffaf6] p-6 shadow-sm">
-        <p className="text-xs uppercase tracking-[0.14em] text-ember">Not In V1</p>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {notInV1.map((item) => (
-            <span key={item} className="rounded-full border border-ember/25 px-3 py-1 text-xs font-semibold text-ember">
-              {item}
-            </span>
-          ))}
+      <section className="page-shell p-6">
+        <h2 className="section-heading text-2xl font-semibold text-coal">V1 operating outcome</h2>
+        <p className="mt-3 max-w-3xl text-sm leading-relaxed text-steel">
+          Sales teams work from one queue. Managers see what is slipping. Leadership sees where response discipline is holding or failing. That is the V1 standard.
+        </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <ButtonLink href="/platform" eventName="cta_view_platform_click" eventParams={{ location: "dealer_os" }}>
+            View Platform
+          </ButtonLink>
+          <ButtonLink href="/request-audit" variant="ghost" eventName="cta_request_audit_click" eventParams={{ location: "dealer_os" }}>
+            Request Revenue Audit
+          </ButtonLink>
         </div>
-      </section>
-
-      <section className="flex flex-wrap gap-3">
-        <ButtonLink href="/pricing">View AUTORA Pricing</ButtonLink>
-        <ButtonLink href="/book" variant="ghost">
-          Schedule Platform Audit
-        </ButtonLink>
       </section>
     </div>
   );

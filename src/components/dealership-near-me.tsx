@@ -193,15 +193,15 @@ export function DealershipNearMe() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="rounded-3xl border border-steel/15 bg-white p-6 shadow-soft">
-        <p className="text-xs uppercase tracking-[0.2em] text-tide">Live Search</p>
+    <div className="page-motion space-y-6">
+      <div className="page-shell p-6">
+        <p className="text-xs uppercase tracking-[0.2em] text-steel">Live Search</p>
         <h2 className="mt-2 text-2xl font-semibold text-coal">Chinese Dealerships Near Me</h2>
         <p className="mt-2 text-sm text-steel">
           We use GPS coordinates or geocoded city/suburb queries to search Google Places first, then fallback to the seeded dataset.
         </p>
 
-        <div className="mt-5 grid gap-4 md:grid-cols-[1fr_1fr_140px_auto_auto]">
+        <div className="stagger-grid mt-5 grid gap-4 md:grid-cols-[1fr_1fr_140px_auto_auto]">
           <select value={brand} onChange={(event) => setBrand(event.target.value)} className="input">
             {BRANDS.map((option) => (
               <option key={option} value={option}>
@@ -232,7 +232,7 @@ export function DealershipNearMe() {
           <button
             type="button"
             onClick={() => void searchDealerships(null)}
-            className="rounded-full bg-coal px-5 py-3 text-sm font-semibold text-white"
+            className="rounded-full bg-coal px-5 py-3 text-sm font-semibold text-white hover:bg-black"
           >
             {loading ? "Searching..." : "Search"}
           </button>
@@ -240,7 +240,7 @@ export function DealershipNearMe() {
           <button
             type="button"
             onClick={() => void handleLocate()}
-            className="rounded-full border border-steel/30 px-5 py-3 text-sm font-semibold text-coal"
+            className="rounded-full border border-black/20 px-5 py-3 text-sm font-semibold text-coal hover:bg-black hover:text-white"
           >
             Use my location
           </button>
@@ -252,14 +252,14 @@ export function DealershipNearMe() {
               <button
                 type="button"
                 onClick={() => void searchDealerships(coords)}
-                className="rounded-full border border-steel/25 px-3 py-1 text-xs font-semibold text-coal"
+                className="rounded-full border border-black/20 px-3 py-1 text-xs font-semibold text-coal hover:bg-black hover:text-white"
               >
                 Use saved location
               </button>
               <button
                 type="button"
                 onClick={clearSavedLocation}
-                className="rounded-full border border-steel/25 px-3 py-1 text-xs font-semibold text-coal"
+                className="rounded-full border border-black/20 px-3 py-1 text-xs font-semibold text-coal hover:bg-black hover:text-white"
               >
                 Clear saved location
               </button>
@@ -275,19 +275,19 @@ export function DealershipNearMe() {
         <div className="space-y-3">
           {data?.dealerships?.length ? (
             data.dealerships.map((dealer) => {
-              const bookingHref = `/book?dealership=${encodeURIComponent(dealer.name)}&brand=${encodeURIComponent(
+              const bookingHref = `/request-audit?dealership=${encodeURIComponent(dealer.name)}&brand=${encodeURIComponent(
                 dealer.brand
               )}&city=${encodeURIComponent(dealer.city)}&province=${encodeURIComponent(dealer.province || "Gauteng")}`;
 
               return (
                 <article
                   key={dealer.id}
-                  className="rounded-2xl border border-steel/15 bg-white p-5 shadow-sm"
+                  className="surface-card p-5"
                   aria-live="polite"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="text-xs uppercase tracking-[0.15em] text-tide">{dealer.brand}</p>
+                      <p className="text-xs uppercase tracking-[0.15em] text-steel">{dealer.brand}</p>
                       <h3 className="mt-1 text-lg font-semibold text-coal">{dealer.name}</h3>
                     </div>
                     {typeof dealer.distanceKm === "number" ? (
@@ -303,14 +303,14 @@ export function DealershipNearMe() {
                     {dealer.province ? `, ${dealer.province}` : ""}
                   </p>
 
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <Link href={bookingHref} className="rounded-full bg-ember px-4 py-2 text-xs font-semibold text-white">
+                  <div className="stagger-grid mt-4 flex flex-wrap gap-2">
+                    <Link href={bookingHref} className="rounded-full bg-coal px-4 py-2 text-xs font-semibold text-white hover:bg-black">
                       Book an Audit for {dealer.name}
                     </Link>
                     <button
                       type="button"
                       onClick={() => setSelected(dealer)}
-                      className="rounded-full border border-steel/25 px-4 py-2 text-xs font-semibold text-coal"
+                      className="rounded-full border border-black/20 px-4 py-2 text-xs font-semibold text-coal hover:bg-black hover:text-white"
                     >
                       View on map
                     </button>
@@ -319,7 +319,7 @@ export function DealershipNearMe() {
                         href={dealer.mapsUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="rounded-full border border-steel/25 px-4 py-2 text-xs font-semibold text-coal"
+                        className="rounded-full border border-black/20 px-4 py-2 text-xs font-semibold text-coal hover:bg-black hover:text-white"
                       >
                         Open Maps
                       </a>
@@ -329,14 +329,14 @@ export function DealershipNearMe() {
               );
             })
           ) : (
-            <div className="rounded-2xl border border-dashed border-steel/30 bg-white p-6 text-sm text-steel">
+            <div className="rounded-2xl border border-dashed border-black/20 bg-white p-6 text-sm text-steel">
               Use your location or search by city/suburb to load nearby Chinese dealerships.
             </div>
           )}
         </div>
 
         <div className="space-y-3">
-          <div className="overflow-hidden rounded-2xl border border-steel/15 bg-white shadow-soft">
+          <div className="overflow-hidden rounded-2xl border border-black/10 bg-white shadow-soft">
             <iframe
               title="Dealership map"
               src={`https://maps.google.com/maps?q=${mapCenter}&z=11&output=embed`}
@@ -346,17 +346,17 @@ export function DealershipNearMe() {
           </div>
 
           {selected ? (
-            <div className="rounded-2xl border border-tide/20 bg-tide/5 p-4">
-              <p className="text-xs uppercase tracking-[0.15em] text-tide">Selected Dealership</p>
+            <div className="panel-muted p-4">
+              <p className="text-xs uppercase tracking-[0.15em] text-steel">Selected Dealership</p>
               <h3 className="mt-1 text-lg font-semibold text-coal">{selected.name}</h3>
               <p className="text-sm text-steel">
                 {selected.address} | {selected.city}
               </p>
               <Link
-                href={`/book?dealership=${encodeURIComponent(selected.name)}&brand=${encodeURIComponent(
+                href={`/request-audit?dealership=${encodeURIComponent(selected.name)}&brand=${encodeURIComponent(
                   selected.brand
                 )}&city=${encodeURIComponent(selected.city)}&province=${encodeURIComponent(selected.province || "Gauteng")}`}
-                className="mt-4 inline-flex rounded-full bg-ember px-4 py-2 text-xs font-semibold text-white"
+                className="mt-4 inline-flex rounded-full bg-coal px-4 py-2 text-xs font-semibold text-white hover:bg-black"
               >
                 Book an Audit for {selected.name}
               </Link>

@@ -15,7 +15,7 @@ type SystemSettings = {
 const defaultState: SystemSettings = {
   whatsappNumber: "+27 70 352 1316",
   timezone: "Africa/Johannesburg",
-  billingPlan: "Growth",
+  billingPlan: "Group Governance",
   bookingAvailability: "Mon-Fri 08:00-17:00"
 };
 
@@ -43,43 +43,52 @@ export function SystemSettingsForm() {
 
   return (
     <div className="space-y-4 rounded-3xl border border-steel/12 bg-white p-6 shadow-sm">
-      <Field label="WhatsApp Number">
-        <input
-          className="input"
-          value={form.whatsappNumber}
-          onChange={(event) => setForm((prev) => ({ ...prev, whatsappNumber: event.target.value }))}
-        />
-      </Field>
-
-      <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Timezone">
+      <section id="whatsapp-number">
+        <Field label="WhatsApp Number">
           <input
             className="input"
-            value={form.timezone}
-            onChange={(event) => setForm((prev) => ({ ...prev, timezone: event.target.value }))}
+            value={form.whatsappNumber}
+            onChange={(event) => setForm((prev) => ({ ...prev, whatsappNumber: event.target.value }))}
           />
         </Field>
+      </section>
 
-        <Field label="Billing Plan">
-          <select
-            className="input"
-            value={form.billingPlan}
-            onChange={(event) => setForm((prev) => ({ ...prev, billingPlan: event.target.value }))}
-          >
-            <option value="Starter">Starter</option>
-            <option value="Growth">Growth</option>
-            <option value="Scale">Scale</option>
-          </select>
-        </Field>
+      <div className="grid gap-4 md:grid-cols-2">
+        <section id="business-hours">
+          <Field label="Timezone">
+            <input
+              className="input"
+              value={form.timezone}
+              onChange={(event) => setForm((prev) => ({ ...prev, timezone: event.target.value }))}
+            />
+          </Field>
+        </section>
+
+        <section id="billing-plan">
+          <Field label="Billing Plan">
+            <select
+              className="input"
+              value={form.billingPlan}
+              onChange={(event) => setForm((prev) => ({ ...prev, billingPlan: event.target.value }))}
+            >
+              <option value="Store Discipline">Store Discipline</option>
+              <option value="Group Governance">Group Governance</option>
+              <option value="Enterprise Infrastructure">Enterprise Infrastructure</option>
+              <option value="OEM Network Deployment">OEM Network Deployment</option>
+            </select>
+          </Field>
+        </section>
       </div>
 
-      <Field label="Booking Availability">
-        <input
-          className="input"
-          value={form.bookingAvailability}
-          onChange={(event) => setForm((prev) => ({ ...prev, bookingAvailability: event.target.value }))}
-        />
-      </Field>
+      <section id="booking-availability">
+        <Field label="Booking Availability">
+          <input
+            className="input"
+            value={form.bookingAvailability}
+            onChange={(event) => setForm((prev) => ({ ...prev, bookingAvailability: event.target.value }))}
+          />
+        </Field>
+      </section>
 
       <div className="flex items-center gap-3">
         <button

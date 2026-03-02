@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 type DealerOption = {
@@ -9,39 +10,58 @@ type DealerOption = {
 
 export function DealerContextSwitch({
   options,
-  selectedDealerId
+  selectedDealerId,
+  label = "Store",
+  allowAllOption = true
 }: {
   options: DealerOption[];
   selectedDealerId?: string;
+  label?: string;
+  allowAllOption?: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  if (!options.length) return null;
+  const normalizedOptions = useMemo(() => {
+    const unique = new Map<string, string>();
+    for (const option of options) {
+      if (!unique.has(option.id)) {
+        unique.set(option.id, option.label);
+      }
+    }
+    return Array.from(unique.entries()).map(([id, optionLabel]) => ({ id, label: optionLabel }));
+  }, [options]);
 
-  const activeDealer = selectedDealerId || searchParams.get("dealer") || "all";
+  if (!normalizedOptions.length) return null;
+
+  const fallbackDealer = normalizedOptions[0]?.id;
+  const shouldAllowAll = allowAllOption && normalizedOptions.length > 1;
+  const requestedDealer = selectedDealerId || searchParams.get("dealer") || (shouldAllowAll ? "all" : fallbackDealer);
+  const hasRequestedDealer =
+    (shouldAllowAll && requestedDealer === "all") || normalizedOptions.some((option) => option.id === requestedDealer);
+  const activeDealer = hasRequestedDealer ? requestedDealer : shouldAllowAll ? "all" : fallbackDealer;
 
   return (
-    <label className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-steel">
-      Dealer:
+    <label className="grid gap-1 text-xs font-semibold uppercase tracking-[0.12em] text-steel">
+      <span>{label}:</span>
       <select
-        className="input w-auto min-w-56 text-xs normal-case tracking-normal"
+        className="input w-full min-w-0 truncate text-xs normal-case tracking-normal"
         value={activeDealer}
         onChange={(event) => {
           const params = new URLSearchParams(searchParams.toString());
           const value = event.target.value;
-          if (value === "all") {
+          if (value === "all" && shouldAllowAll) {
             params.delete("dealer");
           } else {
             params.set("dealer", value);
           }
           const query = params.toString();
-          router.push(query ? `${pathname}?${query}` : pathname);
+          router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
         }}
       >
-        <option value="all">All dealerships</option>
-        {options.map((option) => (
+        {shouldAllowAll ? <option value="all">All stores</option> : null}
+        {normalizedOptions.map((option) => (
           <option key={option.id} value={option.id}>
             {option.label}
           </option>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AnimatedNumber } from "@/components/os/animated-number";
 
 type OsMetricCardProps = {
   label: string;
@@ -16,7 +17,9 @@ function MetricCardBody({ label, value, hint, alert }: Omit<OsMetricCardProps, "
       }`}
     >
       <p className="text-xs uppercase tracking-[0.14em] text-steel">{label}</p>
-      <p className="mt-2 text-3xl font-semibold text-coal">{value}</p>
+      <p className="mt-2 text-3xl font-semibold text-coal">
+        <AnimatedNumber value={value} />
+      </p>
       {hint ? <p className="mt-2 text-xs text-steel">{hint}</p> : null}
     </article>
   );

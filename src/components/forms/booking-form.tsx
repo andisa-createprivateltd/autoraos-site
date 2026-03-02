@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { FormEvent, ReactNode } from "react";
 import { AUTORA_WHATSAPP, BRANDS, PROVINCES } from "@/lib/constants";
 import { formatDateTime, waLink } from "@/lib/utils";
@@ -50,7 +50,8 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
     city: prefill?.city || "",
     preferredDateTime: "",
     notes: "",
-    honeypot: ""
+    honeypot: "",
+    agreeToTerms: false
   });
 
   useEffect(() => {
@@ -89,11 +90,6 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
     };
   }, []);
 
-  const summaryText = useMemo(() => {
-    if (!form.dealershipName) return "Book your 15-minute session";
-    return `Book a session for ${form.dealershipName}`;
-  }, [form.dealershipName]);
-
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -124,7 +120,8 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
         contactPerson: "",
         phone: "",
         email: "",
-        notes: "",
+        dealershipName: "",
+        brand: "Chery",
         honeypot: ""
       }));
     } catch (err) {
@@ -136,9 +133,9 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
 
   if (success) {
     return (
-      <div className="rounded-3xl border border-green-700/20 bg-green-50 p-6">
-        <p className="text-sm font-semibold uppercase tracking-[0.15em] text-green-700">Booking confirmed</p>
-        <h3 className="mt-2 text-balance text-xl font-semibold text-coal">Your session is confirmed.</h3>
+      <div className="rounded-3xl border border-black/10 bg-white p-6 shadow-sm">
+        <p className="text-sm font-semibold uppercase tracking-[0.15em] text-coal">Audit confirmed</p>
+        <h3 className="mt-2 text-balance text-xl font-semibold text-coal">Your revenue audit is scheduled.</h3>
         <p className="mt-3 text-pretty text-sm text-steel">
           {success.booking.dealershipName} ({success.booking.brand}) on {formatDateTime(success.booking.preferredDateTime)}.
         </p>
@@ -147,12 +144,12 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
             href={success.whatsappConfirmationUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex rounded-full bg-[#25D366] px-5 py-3 text-sm font-semibold text-black"
+            className="inline-flex rounded-full border border-black/15 bg-[#25D366] px-5 py-3 text-sm font-semibold text-black"
           >
             Send confirmation on WhatsApp
           </a>
-          <a href="/pricing" className="inline-flex rounded-full border border-steel/25 px-5 py-3 text-sm font-semibold text-coal">
-            View pricing options
+          <a href="/pricing" className="inline-flex rounded-full border border-black/15 px-5 py-3 text-sm font-semibold text-coal hover:bg-black hover:text-white">
+            View pricing
           </a>
         </div>
       </div>
@@ -160,11 +157,13 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5 rounded-3xl border border-steel/15 bg-white p-6 shadow-soft">
+    <form onSubmit={handleSubmit} className="space-y-5 rounded-3xl border border-black/10 bg-white p-6 shadow-[0_16px_34px_rgba(8,13,18,0.06)]">
       <div>
-        <p className="text-xs uppercase tracking-[0.22em] text-tide">Audit Session</p>
-        <h2 className="mt-2 text-balance text-2xl font-semibold text-coal">{summaryText}</h2>
-        <p className="mt-2 text-pretty text-sm text-steel">Choose an available 15-minute slot and share your dealership details.</p>
+        <p className="text-xs uppercase tracking-[0.2em] text-steel">Revenue Audit</p>
+        <h2 className="mt-2 text-balance text-2xl font-semibold text-coal">Schedule your 15-minute revenue audit</h2>
+        <p className="mt-2 text-pretty text-sm text-steel">
+          Share your details. We assess risk, accountability, and next-step execution.
+        </p>
       </div>
 
       <input
@@ -188,21 +187,6 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
           />
         </Field>
 
-        <Field label="Brand" required>
-          <select
-            value={form.brand}
-            onChange={(event) => setForm((prev) => ({ ...prev, brand: event.target.value }))}
-            className="input"
-            required
-          >
-            {BRANDS.filter((brand) => brand !== "All").map((brand) => (
-              <option key={brand} value={brand}>
-                {brand}
-              </option>
-            ))}
-          </select>
-        </Field>
-
         <Field label="Contact person" required>
           <input
             required
@@ -219,7 +203,7 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
             value={form.phone}
             onChange={(event) => setForm((prev) => ({ ...prev, phone: event.target.value }))}
             className="input"
-            placeholder="+27 ..."
+            placeholder="+27 703 521 316"
           />
         </Field>
 
@@ -234,92 +218,67 @@ export function BookingForm({ prefill }: { prefill?: PrefillData }) {
           />
         </Field>
 
-        <Field label="Province" required>
+        <Field label="Brand" required>
           <select
-            value={form.province}
-            onChange={(event) => setForm((prev) => ({ ...prev, province: event.target.value }))}
+            value={form.brand}
+            onChange={(event) => setForm((prev) => ({ ...prev, brand: event.target.value }))}
             className="input"
             required
           >
-            {PROVINCES.map((province) => (
-              <option key={province} value={province}>
-                {province}
+            {BRANDS.filter((brand) => brand !== "All").map((brand) => (
+              <option key={brand} value={brand}>
+                {brand}
               </option>
             ))}
           </select>
         </Field>
 
-        <Field label="City" required>
-          <input
-            required
-            value={form.city}
-            onChange={(event) => setForm((prev) => ({ ...prev, city: event.target.value }))}
-            className="input"
-            placeholder="City"
-          />
-        </Field>
-
-        <Field label="Preferred date/time" required>
-          {loadingSlots ? (
-            <div className="input flex items-center text-sm text-steel">Loading available slots...</div>
+        <Field label="Preferred date/time">
+          {loadingSlots && slots.length === 0 ? (
+            <div className="text-sm text-warn rounded-lg bg-amber-50 p-3">Unable to load slots right now</div>
           ) : slots.length > 0 ? (
             <select
-              required
               value={form.preferredDateTime}
               onChange={(event) => setForm((prev) => ({ ...prev, preferredDateTime: event.target.value }))}
               className="input"
             >
+              <option value="">Select a time...</option>
               {slots.map((slot) => (
                 <option key={slot.iso} value={slot.iso}>
                   {slot.label}
                 </option>
               ))}
             </select>
-          ) : (
-            <input
-              type="datetime-local"
-              required
-              className="input"
-              onChange={(event) => {
-                const local = event.target.value;
-                const iso = local ? new Date(local).toISOString() : "";
-                setForm((prev) => ({ ...prev, preferredDateTime: iso }));
-              }}
-            />
-          )}
+          ) : null}
         </Field>
       </div>
 
-      <Field label="Notes (optional)">
-        <textarea
-          value={form.notes}
-          onChange={(event) => setForm((prev) => ({ ...prev, notes: event.target.value }))}
-          className="input min-h-28"
-          placeholder="Anything we should review before the call?"
-        />
-      </Field>
-
       {error ? <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
+
+      {slots.length === 0 && !loadingSlots && (
+        <div className="rounded-xl border border-black/10 bg-mist/55 p-4">
+          <p className="mb-3 text-sm font-medium text-coal">Scheduling temporarily unavailable</p>
+          <a
+            href={waLink(AUTORA_WHATSAPP, "Hi AUTORA, I want to request a revenue audit.")}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex rounded-full border border-black/15 bg-[#25D366] px-5 py-3 text-sm font-semibold text-black hover:opacity-90"
+          >
+            Request via WhatsApp
+          </a>
+        </div>
+      )}
 
       <button
         type="submit"
-        disabled={isSubmitting}
-        className="inline-flex w-full items-center justify-center rounded-full bg-ember px-5 py-3 text-sm font-semibold text-white transition hover:bg-ember/90 disabled:cursor-not-allowed disabled:opacity-70"
+        disabled={isSubmitting || (slots.length === 0 && !loadingSlots)}
+        className="inline-flex w-full items-center justify-center rounded-full bg-coal px-5 py-3 text-sm font-semibold text-white transition hover:bg-black disabled:cursor-not-allowed disabled:opacity-70"
       >
-        {isSubmitting ? "Booking..." : "Confirm Session"}
+        {isSubmitting ? "Submitting..." : "Request Revenue Audit"}
       </button>
 
       <p className="text-xs text-steel">
-        Optional WhatsApp confirmation available after submission. For direct chat now, use {" "}
-        <a
-          href={waLink(AUTORA_WHATSAPP, "Hi AUTORA, I need help with lead generation.")}
-          target="_blank"
-          rel="noreferrer"
-          className="font-semibold text-tide underline underline-offset-2"
-        >
-          click-to-chat
-        </a>
-        .
+        No obligation. Operational review only. We reply within 2 hours during business hours.
       </p>
     </form>
   );

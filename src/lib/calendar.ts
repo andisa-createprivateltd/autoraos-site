@@ -19,15 +19,15 @@ export function createAuditInvite(details: {
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//AUTORA//Dealer Audit//EN",
+    "PRODID:-//AUTORA//Revenue Audit//EN",
     "CALSCALE:GREGORIAN",
     "BEGIN:VEVENT",
     `UID:${details.uid}`,
     `DTSTAMP:${dtstamp}`,
     `DTSTART:${dtstart}`,
     `DTEND:${dtend}`,
-    "SUMMARY:AUTORA - 15 Minute Dealer Lead Audit",
-    `DESCRIPTION:Audit for ${details.dealershipName} (${details.contactPerson}).`,
+    "SUMMARY:AUTORA - 15 Minute Revenue Audit",
+    `DESCRIPTION:Revenue audit for ${details.dealershipName} (${details.contactPerson}).`,
     "LOCATION:Google Meet / Phone (details sent by AUTORA)",
     "END:VEVENT",
     "END:VCALENDAR"

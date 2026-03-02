@@ -11,6 +11,7 @@ export const ROLE_SCREEN_ACCESS: Record<DealerRole, string[]> = {
     "conversations",
     "leads",
     "bookings",
+    "insights",
     "reports",
     "governance",
     "audit-logs",
@@ -25,6 +26,7 @@ export const ROLE_SCREEN_ACCESS: Record<DealerRole, string[]> = {
     "conversations",
     "leads",
     "bookings",
+    "insights",
     "reports",
     "governance",
     "audit-logs",
@@ -36,6 +38,7 @@ export const ROLE_SCREEN_ACCESS: Record<DealerRole, string[]> = {
     "conversations",
     "leads",
     "bookings",
+    "insights",
     "reports",
     "governance",
     "audit-logs",
@@ -43,7 +46,7 @@ export const ROLE_SCREEN_ACCESS: Record<DealerRole, string[]> = {
     "settings"
   ],
   dealer_sales: ["dashboard", "conversations", "leads", "bookings", "reports"],
-  dealer_marketing: ["dashboard", "reports"]
+  dealer_marketing: ["dashboard", "insights", "reports"]
 };
 
 export function canAccessScreen(role: DealerRole, screen: string) {

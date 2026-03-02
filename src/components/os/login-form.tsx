@@ -25,8 +25,8 @@ export function LoginForm({ nextPath }: LoginFormProps) {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          email,
-          password,
+          email: email.trim(),
+          password: password.trim(),
           next: nextPath
         })
       });
@@ -84,10 +84,7 @@ export function LoginForm({ nextPath }: LoginFormProps) {
         {loading ? "Signing in..." : "Sign in"}
       </button>
 
-      <p className="text-xs text-steel">
-        Credentials are controlled by platform and dealer role env vars (for example `PLATFORM_OWNER_EMAIL`,
-        `DEALER_ADMIN_EMAIL`, `DEALER_SALES_EMAIL`).
-      </p>
+      <p className="text-xs text-steel">Use your authorized dealership or platform account credentials.</p>
     </form>
   );
 }

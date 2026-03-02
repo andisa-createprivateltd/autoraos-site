@@ -5,33 +5,38 @@ import "@/app/globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppFloat } from "@/components/whatsapp-float";
-import { PARENT_COMPANY_NAME, PLATFORM_NAME, PLATFORM_SUBSIDIARY_LINE } from "@/lib/constants";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://autoraos.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://autoraos.company";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${PLATFORM_NAME} | WhatsApp + Lead Infrastructure`,
-    template: `%s | ${PLATFORM_NAME}`
+    default: "AUTORA OS | Revenue Discipline for Dealership Leads",
+    template: "%s | AUTORA OS"
   },
   description:
-    `${PLATFORM_NAME} is the operating system for dealership leads and WhatsApp sales. ${PLATFORM_SUBSIDIARY_LINE}.`,
+    "AUTORA OS is the WhatsApp-first operating system for dealership leads: capture every enquiry, enforce response SLAs, protect bookings, and measure revenue risk across stores.",
   keywords: [
-    PLATFORM_NAME,
     "AUTORA OS",
-    "Dealership WhatsApp platform",
-    "Automotive lead operating system",
-    "Test-drive booking software",
-    PARENT_COMPANY_NAME
+    "dealership lead operations",
+    "WhatsApp dealership software",
+    "SLA enforcement for dealerships",
+    "dealer group revenue governance",
+    "automotive retail operating system"
   ],
   openGraph: {
-    title: PLATFORM_NAME,
-    description: `The operating system for dealership leads and WhatsApp sales. ${PLATFORM_SUBSIDIARY_LINE}.`,
+    title: "AUTORA OS",
+    description:
+      "Revenue discipline for dealership leads and WhatsApp conversations.",
     url: siteUrl,
-    siteName: PLATFORM_NAME,
+    siteName: "AUTORA OS",
     locale: "en_ZA",
     type: "website"
+  },
+  icons: {
+    icon: "/autora-mark.svg",
+    shortcut: "/autora-mark.svg",
+    apple: "/autora-mark.svg"
   }
 };
 
@@ -48,8 +53,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);} 
+                window.gtag = gtag;
                 gtag('js', new Date());
-                gtag('config', '${gaMeasurementId}');
+                gtag('config', '${gaMeasurementId}', { anonymize_ip: true });
               `}
             </Script>
           </>

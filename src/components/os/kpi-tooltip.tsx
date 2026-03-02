@@ -7,7 +7,7 @@ type KpiTooltipProps = {
   definition: string;
   formula: string;
   timeframe: string;
-  lastUpdated: string;
+  lastUpdated: string | null;
 };
 
 export function KpiTooltip({ label, definition, formula, timeframe, lastUpdated }: KpiTooltipProps) {
@@ -54,7 +54,7 @@ export function KpiTooltip({ label, definition, formula, timeframe, lastUpdated 
             </div>
             <div>
               <dt className="font-semibold text-coal">Last updated</dt>
-              <dd>{new Date(lastUpdated).toLocaleString("en-ZA")}</dd>
+              <dd>{lastUpdated ? new Date(lastUpdated).toLocaleString("en-ZA") : "Configured source"}</dd>
             </div>
           </dl>
         </div>

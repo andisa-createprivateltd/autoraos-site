@@ -13,19 +13,19 @@ const sections = [
   {
     heading: "Operations",
     items: [
-      { id: "dashboard", href: "/os/dashboard", label: "Command Center" },
+      { id: "dashboard", href: "/os/dashboard", label: "Dashboard" },
       { id: "conversations", href: "/os/conversations", label: "Inbox" },
       { id: "leads", href: "/os/leads", label: "Queue" },
       { id: "bookings", href: "/os/bookings", label: "Execution" },
+      { id: "assistant", href: "/os/assistant", label: "Policy Engine" },
+      { id: "insights", href: "/os/insights", label: "Visibility" },
       { id: "reports", href: "/os/reports", label: "Reports" }
     ]
   },
   {
     heading: "Governance",
     items: [
-      { id: "governance", href: "/os/governance", label: "Governance" },
-      { id: "audit-logs", href: "/os/audit-logs", label: "Audit Logs" },
-      { id: "assistant", href: "/os/assistant", label: "Policy Engine" }
+      { id: "audit-logs", href: "/os/audit-logs", label: "Audit Logs" }
     ]
   },
   {
