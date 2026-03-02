@@ -7,7 +7,7 @@ type AuditLogsSearchParams = {
   range?: string | string[];
   from?: string | string[];
   to?: string | string[];
-  sla?: string | string[];
+  action?: string | string[];
   user?: string | string[];
   page?: string | string[];
 };
@@ -48,7 +48,7 @@ export default async function OsAuditLogsPage({
   });
   const page = normalizePage(params.page);
   const filters = {
-    sla: single(params.sla),
+    sla: single(params.action),
     user: single(params.user)
   };
   const [dealerOptions, audit] = await Promise.all([
@@ -61,7 +61,7 @@ export default async function OsAuditLogsPage({
     range: scope.range === "7d" ? undefined : scope.range,
     from: scope.range === "custom" ? scope.from : undefined,
     to: scope.range === "custom" ? scope.to : undefined,
-    sla: filters.sla,
+    action: filters.sla,
     user: filters.user
   };
   const exportQuery = queryString(baseParams);
@@ -92,11 +92,13 @@ export default async function OsAuditLogsPage({
             ))}
           </select>
 
-          <select name="sla" defaultValue={filters.sla || "all"} className="input">
-            <option value="all">All SLA types</option>
+          <select name="action" defaultValue={filters.sla || "all"} className="input">
+            <option value="all">All actions</option>
             <option value="sla_breached">SLA Breach</option>
             <option value="sla_satisfied">SLA Satisfied</option>
             <option value="support_action">Support Action</option>
+            <option value="policy_update">Policy Update</option>
+            <option value="booking_confirm">Booking Confirm</option>
           </select>
 
           <select name="user" defaultValue={filters.user || "all"} className="input">
@@ -150,6 +152,7 @@ export default async function OsAuditLogsPage({
             <thead>
               <tr className="border-b border-steel/15 text-steel">
                 <th className="px-3 py-2">Timestamp</th>
+                <th className="px-3 py-2">Severity</th>
                 <th className="px-3 py-2">Action</th>
                 <th className="px-3 py-2">Entity</th>
                 <th className="px-3 py-2">Context</th>
@@ -160,6 +163,11 @@ export default async function OsAuditLogsPage({
                 audit.rows.map((row) => (
                   <tr key={row.id} className="border-b border-steel/10">
                     <td className="px-3 py-2 text-steel">{new Date(row.created_at).toLocaleString("en-ZA")}</td>
+                    <td className="px-3 py-2">
+                      <span className={`rounded-full px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] ${severityTone(row.action)}`}>
+                        {severityLabel(row.action)}
+                      </span>
+                    </td>
                     <td className="px-3 py-2 font-medium text-coal">{row.action}</td>
                     <td className="px-3 py-2 text-steel">{row.entity_type}</td>
                     <td className="px-3 py-2 text-steel">{JSON.stringify(row.metadata || {})}</td>
@@ -167,7 +175,7 @@ export default async function OsAuditLogsPage({
                 ))
               ) : (
                 <tr>
-                  <td colSpan={4} className="px-3 py-6 text-center text-sm text-steel">
+                  <td colSpan={5} className="px-3 py-6 text-center text-sm text-steel">
                     No audit entries match the selected filters.
                   </td>
                 </tr>
@@ -196,4 +204,16 @@ export default async function OsAuditLogsPage({
       </section>
     </div>
   );
+}
+
+function severityLabel(action: string) {
+  if (action.includes("breach") || action.includes("no_show")) return "Critical";
+  if (action.includes("policy") || action.includes("support") || action.includes("handoff")) return "Warn";
+  return "Info";
+}
+
+function severityTone(action: string) {
+  if (action.includes("breach") || action.includes("no_show")) return "bg-red-100 text-red-800";
+  if (action.includes("policy") || action.includes("support") || action.includes("handoff")) return "bg-amber-100 text-amber-900";
+  return "bg-steel/10 text-coal";
 }
