@@ -1,4 +1,4 @@
-import { PublicSection } from "@/components/design/public-primitives";
+import { PanelCard, PublicSection } from "@/components/design/public-primitives";
 import { LiveSystemPanel, OperationalSurfaceCard } from "@/components/marketing/operational-surfaces";
 import { ButtonLink } from "@/components/ui/button-link";
 
@@ -71,29 +71,25 @@ export async function HomeAudiV2() {
         tone="dark"
         grid
         className="-mt-[82px] pt-[82px]"
-        containerClassName="py-[clamp(92px,12vw,168px)]"
+        containerClassName="py-[clamp(84px,10vw,136px)]"
         testId="home-hero"
       >
-        <div className="grid gap-16 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)] lg:items-end lg:gap-20">
-          <div className="max-w-[820px]" data-reveal>
+        <div className="grid gap-12 xl:grid-cols-[minmax(0,1fr)_420px] xl:items-end">
+          <div className="max-w-[760px]" data-reveal>
             <p className="autora-eyebrow autora-eyebrow-light">Revenue control infrastructure · dealership networks</p>
-            <h1 className="autora-display-heading mt-8 max-w-[820px] text-white">
-              Revenue control
-              <br />
-              infrastructure for
-              <br />
-              <em>dealership networks.</em>
+            <h1 className="autora-display-heading mt-6 max-w-[760px] text-white">
+              Revenue Control Infrastructure for Dealership Networks
             </h1>
-            <div className="autora-copy autora-copy-light mt-10 max-w-[650px] border-t border-white/20 pt-6 text-[17px] leading-[1.8]">
+            <div className="autora-copy autora-copy-light mt-8 max-w-[640px] border-t border-white/14 pt-6 text-[18px] leading-[1.75]">
               <p>
                 AUTORA OS enforces how dealerships respond to, follow up on, and convert inbound demand into booked
                 customers.
               </p>
-              <p className="mt-5 text-white/58">
+              <p className="mt-5">
                 It sits above CRM, DMS, and messaging systems — ensuring execution is not optional.
               </p>
             </div>
-            <div className="mt-11 flex flex-col items-stretch gap-5 sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="mt-10 flex flex-col items-stretch gap-4 sm:flex-row sm:flex-wrap sm:items-center">
               <ButtonLink href="/request-audit" eventName="cta_request_audit_click" eventParams={{ location: "home_hero" }}>
                 Request Revenue Audit
               </ButtonLink>
@@ -105,157 +101,137 @@ export async function HomeAudiV2() {
 
           <div data-reveal>
             <LiveSystemPanel
-              eyebrow="Control register / 01"
-              title="Operational state"
+              eyebrow="Live system panel"
+              title="Operational status"
               metrics={[
                 { label: "Revenue at Risk", value: "R 412k", status: "Action Required", tone: "warning" },
                 { label: "SLA Breach Risk", value: "18 stores", status: "Breach Risk", tone: "risk" },
                 { label: "Urgent Leads Pending", value: "27 leads", status: "Action Required", tone: "warning" },
                 { label: "Execution Required", value: "14 bookings", status: "Non-Compliant", tone: "risk" }
               ]}
-              footer="A control register for the decisions that cannot wait for a month-end report."
+              footer="Governance remains visible while opportunities are still recoverable. Leadership does not wait for a month-end report to see the break." 
             />
           </div>
         </div>
-        <div className="mt-20 grid border-y border-white/15 text-white/48 sm:grid-cols-4" data-reveal>
-          {[
-            ["01", "inbound demand"],
-            ["02", "response discipline"],
-            ["03", "booking execution"],
-            ["04", "network governance"]
-          ].map(([number, label]) => (
-            <div key={number} className="flex items-center gap-4 border-b border-white/10 py-4 last:border-0 sm:border-b-0 sm:border-r sm:px-5 sm:first:pl-0 sm:last:border-r-0">
-              <span className="font-mono-ap text-[10px] text-[#d13a44]">{number}</span>
-              <span className="font-mono-ap text-[9px] uppercase tracking-[0.18em]">{label}</span>
+      </PublicSection>
+
+      <PublicSection tone="light" className="py-[104px]" testId="home-problem">
+        <div className="grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-start">
+          <div data-reveal>
+            <p className="autora-eyebrow autora-eyebrow-dark">The problem</p>
+            <h2 className="autora-section-heading mt-6 max-w-[620px] text-black">
+              Dealerships do not lose revenue due to lack of demand.
+              <br />
+              They lose revenue because execution breaks.
+            </h2>
+          </div>
+          <div data-reveal>
+            <div className="grid gap-px border border-[#E8E6E1] bg-[#E8E6E1]">
+              {problemPoints.map((point) => (
+                <div key={point} className="bg-white px-6 py-5 font-sans-ap text-[15px] font-light leading-[1.85] text-[#3A3835]">
+                  {point}
+                </div>
+              ))}
             </div>
+            <p className="mt-8 font-sans-ap text-[16px] font-light leading-[1.85] text-[#3A3835]">
+              Existing systems record activity.
+            </p>
+            <p className="mt-2 font-serif text-[30px] leading-[1.18] text-black">They do not enforce it.</p>
+          </div>
+        </div>
+      </PublicSection>
+
+      <PublicSection tone="dark" className="py-[104px]" testId="home-what-autora-does">
+        <div className="mb-12 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+          <div data-reveal>
+            <p className="autora-eyebrow autora-eyebrow-light">What AUTORA does</p>
+            <h2 className="autora-section-heading mt-6 max-w-[620px] text-white">
+              AUTORA OS enforces execution across four layers.
+            </h2>
+          </div>
+          <p className="autora-copy autora-copy-muted-light max-w-[640px] text-[15px] leading-[1.9]" data-reveal>
+            The architecture is built to govern the path from inbound demand to attended booking. It does not sit beside
+            operations. It controls the sequence inside them.
+          </p>
+        </div>
+        <div className="grid gap-px border border-white/10 bg-white/10 md:grid-cols-2 xl:grid-cols-4" data-reveal data-reveal-stagger>
+          {controlLayers.map((layer) => (
+            <PanelCard key={layer.number} tone="dark" className="border-0 rounded-none p-8">
+              <p className="font-mono-ap text-[9px] uppercase tracking-[0.18em] text-white/28">Layer {layer.number}</p>
+              <h3 className="mt-4 font-serif text-[30px] font-normal leading-[1.05] text-white">{layer.title}</h3>
+              <p className="mt-4 font-sans-ap text-[14px] font-light leading-[1.85] text-white/54">{layer.detail}</p>
+            </PanelCard>
           ))}
         </div>
       </PublicSection>
 
-      <PublicSection tone="light" className="py-[clamp(96px,11vw,152px)]" testId="home-problem">
-        <div className="grid gap-16 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24">
+      <PublicSection tone="light" className="py-[104px]" testId="home-live-platform">
+        <div className="mb-12 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
           <div data-reveal>
-            <p className="autora-eyebrow autora-eyebrow-dark">The problem / 01</p>
-            <h2 className="autora-section-heading mt-8 max-w-[650px] text-black">
-              Dealerships do not lose revenue due to lack of demand.
-              <br />
-              <em>They lose it when execution breaks.</em>
-            </h2>
+            <p className="autora-eyebrow autora-eyebrow-dark">Live platform</p>
+            <h2 className="autora-section-heading mt-6 max-w-[680px] text-black">Live operational environment</h2>
           </div>
-          <div data-reveal>
-            <div className="autora-index-list border-t border-[#c9c6c0]">
-              {problemPoints.map((point, index) => (
-                <div key={point} className="grid grid-cols-[44px_1fr] gap-5 border-b border-[#dcd9d3] py-5">
-                  <span className="font-mono-ap text-[10px] tracking-[0.18em] text-[#b8202a]">0{index + 1}</span>
-                  <span className="font-sans-ap text-[15px] font-light leading-[1.8] text-[#3a3835]">{point}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-12 border-t border-[#c9c6c0] pt-6">
-              <p className="font-sans-ap text-[16px] font-light leading-[1.8] text-[#3a3835]">Existing systems record activity.</p>
-              <p className="mt-2 font-serif text-[clamp(2rem,4vw,3.5rem)] leading-[1.05] text-black">They do not enforce it.</p>
-            </div>
-          </div>
+          <p className="autora-copy autora-copy-muted-dark max-w-[640px] text-[15px] leading-[1.9]" data-reveal>
+            These surfaces are where the work is controlled: urgency queue, response pressure, booking execution. The
+            system shows where action is required before the opportunity decays.
+          </p>
+        </div>
+        <div className="grid gap-6 xl:grid-cols-3" data-reveal data-reveal-stagger>
+          <OperationalSurfaceCard
+            eyebrow="Urgency queue"
+            title="Timed queue control"
+            rows={[
+              { label: "Lead", value: "BYD test-drive request", tone: "default" },
+              { label: "Timer", value: "Breached · 00m 42s", tone: "risk" },
+              { label: "Escalation", value: "Manager route armed", tone: "muted" },
+              { label: "Required", value: "Reply + booking action", tone: "safe" }
+            ]}
+            footer="Urgency is measured from message receipt, not from when someone remembers to check the inbox."
+          />
+          <OperationalSurfaceCard
+            eyebrow="Inbox"
+            title="Response pressure visible"
+            rows={[
+              { label: "Channel", value: "WhatsApp + web", tone: "default" },
+              { label: "Owner", value: "Assigned · sales desk", tone: "default" },
+              { label: "State", value: "Action required", tone: "risk" },
+              { label: "Next", value: "Confirm intent and slot", tone: "muted" }
+            ]}
+            footer="The inbox is governed around ownership, not just message storage."
+          />
+          <OperationalSurfaceCard
+            eyebrow="Booking execution"
+            title="Completion stays governed"
+            rows={[
+              { label: "Booking", value: "Slot held · awaiting confirmation", tone: "default" },
+              { label: "Reminder", value: "Queued for follow-up", tone: "muted" },
+              { label: "Risk", value: "No-show pressure detected", tone: "risk" },
+              { label: "Required", value: "Confirm attendance", tone: "safe" }
+            ]}
+            footer="Execution remains visible after the lead is answered, so revenue does not leak between contact and arrival."
+          />
         </div>
       </PublicSection>
 
-      <PublicSection tone="dark" className="py-[clamp(96px,11vw,152px)]" testId="home-what-autora-does">
-        <div className="grid gap-16 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24">
+      <PublicSection tone="dark" className="py-[104px]" testId="home-operational-control">
+        <div className="grid gap-12 lg:grid-cols-[0.84fr_1.16fr] lg:items-start">
           <div data-reveal>
-            <p className="autora-eyebrow autora-eyebrow-light">What AUTORA does / 02</p>
-            <h2 className="autora-section-heading mt-8 max-w-[650px] text-white">
-              AUTORA OS enforces execution across four layers.
-            </h2>
-          </div>
-          <div data-reveal>
-            <p className="autora-copy autora-copy-muted-light max-w-[650px] text-[15px] leading-[1.9]">
-              The architecture governs the path from inbound demand to attended booking. It does not sit beside
-              operations. It controls the sequence inside them.
-            </p>
-            <div className="autora-layer-list mt-12 border-t border-white/20">
-              {controlLayers.map((layer) => (
-                <div key={layer.number} className="grid gap-5 border-b border-white/10 py-7 sm:grid-cols-[56px_180px_1fr] sm:items-start sm:gap-8">
-                  <span className="font-mono-ap text-[10px] tracking-[0.18em] text-[#d13a44]">{layer.number}</span>
-                  <h3 className="font-serif text-[30px] font-normal leading-none text-white">{layer.title}</h3>
-                  <p className="max-w-[520px] font-sans-ap text-[14px] font-light leading-[1.8] text-white/54">{layer.detail}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </PublicSection>
-
-      <PublicSection tone="light" className="py-[clamp(96px,11vw,152px)]" testId="home-live-platform">
-        <div className="grid gap-16 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24">
-          <div data-reveal>
-            <p className="autora-eyebrow autora-eyebrow-dark">Live operational environment / 03</p>
-            <h2 className="autora-section-heading mt-8 max-w-[650px] text-black">Where the work is controlled.</h2>
-          </div>
-          <div data-reveal>
-            <p className="autora-copy autora-copy-muted-dark max-w-[650px] text-[15px] leading-[1.9]">
-              These are the operating surfaces for urgency, response pressure, and booking completion. No showcase
-              layer. No demo state. The system shows where action is required before the opportunity decays.
-            </p>
-            <div className="mt-12 border-t border-[#c9c6c0]">
-              <OperationalSurfaceCard
-                eyebrow="Urgency queue"
-                title="Timed queue control"
-                rows={[
-                  { label: "Lead", value: "BYD test-drive request", tone: "default" },
-                  { label: "Timer", value: "Breached · 00m 42s", tone: "risk" },
-                  { label: "Escalation", value: "Manager route armed", tone: "muted" },
-                  { label: "Required", value: "Reply + booking action", tone: "safe" }
-                ]}
-                footer="Urgency is measured from message receipt, not from when someone remembers to check the inbox."
-              />
-              <OperationalSurfaceCard
-                eyebrow="Inbox"
-                title="Response pressure visible"
-                rows={[
-                  { label: "Channel", value: "WhatsApp + web", tone: "default" },
-                  { label: "Owner", value: "Assigned · sales desk", tone: "default" },
-                  { label: "State", value: "Action required", tone: "risk" },
-                  { label: "Next", value: "Confirm intent and slot", tone: "muted" }
-                ]}
-                footer="The inbox is governed around ownership, not just message storage."
-              />
-              <OperationalSurfaceCard
-                eyebrow="Booking execution"
-                title="Completion stays governed"
-                rows={[
-                  { label: "Booking", value: "Slot held · awaiting confirmation", tone: "default" },
-                  { label: "Reminder", value: "Queued for follow-up", tone: "muted" },
-                  { label: "Risk", value: "No-show pressure detected", tone: "risk" },
-                  { label: "Required", value: "Confirm attendance", tone: "safe" }
-                ]}
-                footer="Execution remains visible after the lead is answered, so revenue does not leak between contact and arrival."
-              />
-            </div>
-          </div>
-        </div>
-      </PublicSection>
-
-      <PublicSection tone="dark" className="py-[clamp(96px,11vw,152px)]" testId="home-operational-control">
-        <div className="grid gap-16 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24">
-          <div data-reveal>
-            <p className="autora-eyebrow autora-eyebrow-light">Operational control / 04</p>
-            <h2 className="autora-section-heading mt-8 max-w-[650px] text-white">
+            <p className="autora-eyebrow autora-eyebrow-light">Operational control</p>
+            <h2 className="autora-section-heading mt-6 max-w-[620px] text-white">
               This is not reporting.
               <br />
-              <em>This is enforcement.</em>
+              This is enforcement.
             </h2>
           </div>
-          <div data-reveal>
-            <div className="autora-control-register border-t border-white/20">
-              {controlItems.map((item, index) => (
-                <div key={item} className="flex items-center justify-between gap-6 border-b border-white/10 py-5">
-                  <span className="font-mono-ap text-[10px] tracking-[0.18em] text-[#d13a44]">0{index + 1}</span>
-                  <span className="flex-1 font-sans-ap text-[15px] font-light text-white/70">{item}</span>
-                  <span className="font-mono-ap text-[9px] uppercase tracking-[0.16em] text-white/28">governed</span>
+          <div>
+            <div className="grid gap-px border border-white/10 bg-white/10 md:grid-cols-2" data-reveal data-reveal-stagger>
+              {controlItems.map((item) => (
+                <div key={item} className="bg-black px-6 py-5 font-sans-ap text-[15px] font-light leading-[1.8] text-white/64">
+                  {item}
                 </div>
               ))}
             </div>
-            <p className="mt-10 autora-copy autora-copy-muted-light max-w-[720px] text-[15px] leading-[1.9]">
+            <p className="mt-8 autora-copy autora-copy-muted-light max-w-[720px] text-[15px] leading-[1.9]" data-reveal>
               AUTORA controls the parts of the dealership operation where margin is usually lost: ownership, timing,
               escalation, booking follow-through, and the point where leadership has to intervene.
             </p>
@@ -263,54 +239,47 @@ export async function HomeAudiV2() {
         </div>
       </PublicSection>
 
-      <PublicSection tone="light" className="py-[clamp(96px,11vw,152px)]" testId="home-outcomes">
-        <div className="grid gap-16 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24">
+      <PublicSection tone="light" className="py-[104px]" testId="home-outcomes">
+        <div className="mb-12 grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
           <div data-reveal>
-            <p className="autora-eyebrow autora-eyebrow-dark">Outcomes / 05</p>
-            <h2 className="autora-section-heading mt-8 max-w-[650px] text-black">Execution control changes revenue outcomes.</h2>
+            <p className="autora-eyebrow autora-eyebrow-dark">Outcomes</p>
+            <h2 className="autora-section-heading mt-6 max-w-[620px] text-black">Execution control changes revenue outcomes.</h2>
           </div>
-          <div data-reveal>
-            <p className="autora-copy autora-copy-muted-dark max-w-[650px] text-[15px] leading-[1.9]">
-              Where measured deployment data exists, it is labeled as measured. Where the result depends on rollout
-              scope, it is labeled as modeled. The commercial effect remains tied to governed execution.
-            </p>
-            <div className="autora-outcome-list mt-12 border-t border-[#c9c6c0]">
-              {outcomeCards.map((item, index) => (
-                <div key={item.label} className="grid gap-5 border-b border-[#dcd9d3] py-7 sm:grid-cols-[56px_160px_1fr] sm:items-center sm:gap-8">
-                  <span className="font-mono-ap text-[10px] tracking-[0.18em] text-[#b8202a]">0{index + 1}</span>
-                  <p className="font-serif text-[clamp(2.6rem,4vw,4.6rem)] leading-none text-black">{item.value}</p>
-                  <div>
-                    <p className="font-mono-ap text-[10px] uppercase tracking-[0.18em] text-[#77736d]">{item.label}</p>
-                    <p className="mt-2 font-sans-ap text-[14px] font-light leading-[1.8] text-[#3a3835]">{item.note}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <p className="autora-copy autora-copy-muted-dark max-w-[640px] text-[15px] leading-[1.9]" data-reveal>
+            Where measured deployment data exists, it is labeled as measured. Where the result depends on rollout scope,
+            it is labeled as modeled. Either way, the commercial effect is tied to governed execution.
+          </p>
+        </div>
+        <div className="grid gap-px border border-[#E8E6E1] bg-[#E8E6E1] md:grid-cols-2 xl:grid-cols-4" data-reveal data-reveal-stagger>
+          {outcomeCards.map((item) => (
+            <PanelCard key={item.label} className="border-0 rounded-none p-8">
+              <p className="font-serif text-[clamp(2.7rem,4vw,4.8rem)] font-normal leading-none text-black">{item.value}</p>
+              <p className="mt-6 font-mono-ap text-[10px] uppercase tracking-[0.18em] text-[#9E9B95]">{item.label}</p>
+              <p className="mt-3 font-sans-ap text-[14px] font-light leading-[1.8] text-[#3A3835]">{item.note}</p>
+            </PanelCard>
+          ))}
         </div>
       </PublicSection>
 
-      <PublicSection tone="dark" className="py-[clamp(112px,14vw,190px)]" testId="home-cta">
-        <div className="grid gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24" data-reveal>
-          <p className="autora-eyebrow autora-eyebrow-light">Revenue control infrastructure / close</p>
-          <div>
-            <h2 className="autora-section-heading max-w-[820px] text-white">
-              If AUTORA disappeared,
-              <br />
-              <em>operations would break.</em>
-            </h2>
-            <p className="autora-copy autora-copy-muted-light mt-8 max-w-[650px] text-[15px] leading-[1.9]">
-              That is the point. The system exists to make response discipline, booking execution, escalation, and
-              revenue control non-optional across the network.
-            </p>
-            <div className="mt-11 flex flex-col items-stretch gap-5 sm:flex-row sm:flex-wrap sm:items-center">
-              <ButtonLink href="/request-audit" eventName="cta_request_audit_click" eventParams={{ location: "home_close" }}>
-                Request Revenue Audit
-              </ButtonLink>
-              <ButtonLink href="/enterprise" variant="ghost" className="sm:w-auto">
-                Enterprise deployment
-              </ButtonLink>
-            </div>
+      <PublicSection tone="dark" className="py-[120px] text-center" testId="home-cta">
+        <div className="mx-auto max-w-[760px]" data-reveal>
+          <p className="autora-eyebrow autora-eyebrow-light justify-center">Revenue control infrastructure</p>
+          <h2 className="autora-section-heading mt-6 text-white">
+            If AUTORA disappeared,
+            <br />
+            <em>operations would break.</em>
+          </h2>
+          <p className="autora-copy autora-copy-muted-light mx-auto mt-6 max-w-[620px] text-[15px] leading-[1.9]">
+            That is the point. The system exists to make response discipline, booking execution, escalation, and revenue
+            control non-optional across the network.
+          </p>
+          <div className="mt-10 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:flex-wrap sm:items-center">
+            <ButtonLink href="/request-audit" eventName="cta_request_audit_click" eventParams={{ location: "home_close" }}>
+              Request Revenue Audit
+            </ButtonLink>
+            <ButtonLink href="/enterprise" variant="ghost" className="sm:w-auto">
+              Enterprise deployment
+            </ButtonLink>
           </div>
         </div>
       </PublicSection>
