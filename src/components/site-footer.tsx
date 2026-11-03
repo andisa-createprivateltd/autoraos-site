@@ -1,63 +1,54 @@
 import Link from "next/link";
-import { PLATFORM_NAME } from "@/lib/constants";
+import { AutoraLogo } from "@/components/autora-logo";
+
+const navigation = [
+  ["Platform", "/platform"],
+  ["How It Works", "/how-it-works"],
+  ["Pricing", "/pricing"],
+  ["Enterprise", "/enterprise"],
+  ["Security", "/security"],
+  ["Founder", "/founder-narrative"],
+  ["Integrations", "/integrations"],
+  ["Contact", "/contact"],
+  ["Revenue Audit", "/request-audit"]
+] as const;
+
+const access = [
+  ["Login", "/os/login"],
+  ["Privacy", "/privacy"],
+  ["Terms", "/terms"],
+  ["POPIA", "/popia"]
+] as const;
+
+function FooterColumn({ title, links }: { title: string; links: readonly (readonly [string, string])[] }) {
+  return (
+    <div>
+      <p className="mb-5 font-mono-ap text-[10px] uppercase tracking-[0.2em] text-white/45">{title}</p>
+      <div className="grid gap-3">
+        {links.map(([label, href]) => (
+          <Link key={label} href={href} className="font-mono-ap text-[10px] uppercase tracking-[0.16em] text-white/70 transition hover:text-white">
+            {label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function SiteFooter() {
   return (
-    <footer className="footer-enter mt-20 border-t border-white/10 bg-[#0b0d10] text-white">
-      <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-12 md:grid-cols-[2fr_1fr_1fr] md:px-6">
-        <div>
-          <p className="text-lg font-semibold tracking-[0.09em]">{PLATFORM_NAME} OS</p>
-          <p className="mt-1 text-xs uppercase tracking-[0.18em] text-white/64">
-            Revenue discipline for dealership leads
-          </p>
-          <p className="mt-3 max-w-lg text-sm text-white/80">
-            WhatsApp-first lead operations, SLA enforcement, booking execution, and governance controls for dealership teams.
-          </p>
-          <p className="mt-4 text-xs text-white/60">© {new Date().getFullYear()} AUTORA OS. All rights reserved.</p>
-        </div>
-
-        <div className="space-y-2 text-sm">
-          <p className="font-semibold text-white">Navigation</p>
-          <Link href="/" className="block text-white/80 transition hover:text-white">
-            Home
-          </Link>
-          <Link href="/platform" className="block text-white/80 transition hover:text-white">
-            Platform
-          </Link>
-          <Link href="/integrations" className="block text-white/80 transition hover:text-white">
-            Integrations
-          </Link>
-          <Link href="/how-it-works" className="block text-white/80 transition hover:text-white">
-            How It Works
-          </Link>
-          <Link href="/pricing" className="block text-white/80 transition hover:text-white">
-            Pricing
-          </Link>
-          <Link href="/enterprise" className="block text-white/80 transition hover:text-white">
-            Enterprise
-          </Link>
-          <Link href="/security" className="block text-white/80 transition hover:text-white">
-            Security
-          </Link>
-          <Link href="/contact" className="block text-white/80 transition hover:text-white">
-            Contact
-          </Link>
-        </div>
-
-        <div className="space-y-2 text-sm">
-          <p className="font-semibold text-white">Legal</p>
-          <Link href="/privacy" className="block text-white/80 transition hover:text-white">
-            Privacy
-          </Link>
-          <Link href="/terms" className="block text-white/80 transition hover:text-white">
-            Terms
-          </Link>
-          <Link href="/popia" className="block text-white/80 transition hover:text-white">
-            POPIA
-          </Link>
-          <Link href="/os/login" className="block text-white/80 transition hover:text-white">
-            Login
-          </Link>
+    <footer className="border-t border-white/10 bg-black text-white">
+      <div className="mx-auto max-w-[1400px] px-[clamp(24px,5vw,80px)] py-[clamp(64px,8vw,104px)]">
+        <div className="grid gap-14 lg:grid-cols-[1.2fr_0.8fr_0.8fr]">
+          <div>
+            <AutoraLogo variant="light" className="text-[0.96rem]" />
+            <p className="mt-7 max-w-[520px] font-sans-ap text-[14px] font-light leading-[1.85] text-white/56">
+              Operational command infrastructure for dealership networks. Govern urgency, booking execution, auditability, and revenue accountability across every store in the group.
+            </p>
+            <p className="mt-9 font-mono-ap text-[10px] uppercase tracking-[0.16em] text-white/45">© 2026 AUTORA OS. ALL RIGHTS RESERVED.</p>
+          </div>
+          <FooterColumn title="Navigation" links={navigation} />
+          <FooterColumn title="Access" links={access} />
         </div>
       </div>
     </footer>
