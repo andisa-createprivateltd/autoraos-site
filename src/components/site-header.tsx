@@ -33,7 +33,7 @@ export function SiteHeader() {
           <Link href="/request-audit" className="autora-button autora-button--accent min-h-[46px] px-[1.45rem]">Request Audit</Link>
         </div>
 
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="ml-auto flex items-center gap-3 lg:hidden">
           <Link href="/request-audit" className="autora-button autora-button--accent min-h-[46px] px-[1.2rem] text-[9px]">
             Request Audit
           </Link>
