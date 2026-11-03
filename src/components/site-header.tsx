@@ -13,7 +13,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#081019] text-white">
       <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-4 px-[clamp(20px,4vw,48px)] py-[15px]">
-        <Link href="/" className="hidden shrink-0 sm:block" aria-label="AUTORA OS home">
+        <Link href="/" className="hidden shrink-0 md:block" aria-label="AUTORA OS home">
           <AutoraLogo variant="light" className="text-[1rem] tracking-[0.32em]" />
         </Link>
 
