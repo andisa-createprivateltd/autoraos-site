@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_LINKS } from "@/lib/constants";
+import { AutoraLogo } from "@/components/autora-logo";
 import { ButtonLink } from "@/components/ui/button-link";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +14,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#081019] text-white">
       <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-4 px-[clamp(20px,4vw,48px)] py-[15px]">
         <Link href="/" className="shrink-0" aria-label="AUTORA OS home">
-          <span className="font-serif text-[1.35rem] tracking-[0.18em] text-white">AUTORA OS</span>
+          <AutoraLogo variant="light" className="text-[1rem] tracking-[0.32em]" />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
