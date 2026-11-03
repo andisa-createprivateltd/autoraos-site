@@ -13,7 +13,7 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-white/10 bg-[#081019] text-white">
       <div className="mx-auto flex w-full max-w-[1400px] items-center justify-between gap-4 px-[clamp(20px,4vw,48px)] py-[15px]">
-        <Link href="/" className="shrink-0" aria-label="AUTORA OS home">
+        <Link href="/" className="hidden shrink-0 sm:block" aria-label="AUTORA OS home">
           <AutoraLogo variant="light" className="text-[1rem] tracking-[0.32em]" />
         </Link>
 
@@ -33,8 +33,18 @@ export function SiteHeader() {
           <Link href="/request-audit" className="autora-button autora-button--accent min-h-[46px] px-[1.45rem]">Request Audit</Link>
         </div>
 
-        <details className="relative lg:hidden">
-          <summary className="list-none cursor-pointer border border-white/20 px-4 py-2 font-mono-ap text-[10px] uppercase tracking-[0.18em] text-white">Menu</summary>
+        <div className="flex items-center gap-3 lg:hidden">
+          <Link href="/request-audit" className="autora-button autora-button--accent min-h-[46px] px-[1.2rem] text-[9px]">
+            Request Audit
+          </Link>
+          <details className="relative">
+          <summary aria-label="Open navigation" className="flex h-[46px] w-[46px] list-none cursor-pointer items-center justify-center border border-white/35 text-white [&::-webkit-details-marker]:hidden">
+            <span className="grid w-[19px] gap-[4px]" aria-hidden="true">
+              <span className="h-px bg-white" />
+              <span className="h-px bg-white" />
+              <span className="h-px bg-white" />
+            </span>
+          </summary>
           <div className="absolute right-0 mt-3 w-72 border border-white/15 bg-[#081019] p-4">
             <div className="grid gap-1">
               {NAV_LINKS.filter((link) => link.href !== "/").map((link) => (
@@ -46,7 +56,8 @@ export function SiteHeader() {
               <ButtonLink href="/request-audit" className="mt-2 w-full">Request Audit</ButtonLink>
             </div>
           </div>
-        </details>
+          </details>
+        </div>
       </div>
     </header>
   );
