@@ -1704,3 +1704,325 @@ body {
     display: grid;
   }
 }
+
+/* Award-pass refinements: one editorial system across the public routes. */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 700ms cubic-bezier(0.22, 0.64, 0.3, 1), transform 700ms cubic-bezier(0.22, 0.64, 0.3, 1);
+}
+
+.scroll-reveal[data-visible="true"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.volvo-teaser,
+.volvo-teaser:visited {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+}
+
+.volvo-teaser:focus-visible,
+.volvo-news__list a:focus-visible,
+.volvo-pricing-card__action:focus-visible {
+  outline: 2px solid var(--volvo-red);
+  outline-offset: 5px;
+}
+
+.volvo-pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--volvo-line);
+  background: var(--volvo-line);
+}
+
+.volvo-pricing-card {
+  display: flex;
+  min-height: 560px;
+  flex-direction: column;
+  padding: 28px;
+  background: #fff;
+  color: var(--volvo-ink);
+}
+
+.volvo-pricing-card--highlighted {
+  background: var(--volvo-navy);
+  color: #fff;
+}
+
+.volvo-pricing-card__head {
+  display: flex;
+  min-height: 44px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.volvo-pricing-card .volvo-overline {
+  color: var(--volvo-ink-soft);
+}
+
+.volvo-pricing-card--highlighted .volvo-overline {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.volvo-pricing-card__badge {
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 4px;
+  color: var(--volvo-red);
+  font-family: var(--volvo-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.volvo-pricing-card--highlighted .volvo-pricing-card__badge {
+  color: #f2b8bd;
+}
+
+.volvo-pricing-card h3 {
+  max-width: 260px;
+  margin: 34px 0 0;
+  font-family: var(--volvo-sans);
+  font-size: clamp(30px, 3vw, 50px);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+}
+
+.volvo-pricing-card__description {
+  min-height: 80px;
+  margin-top: 24px;
+  color: var(--volvo-ink-soft);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.volvo-pricing-card--highlighted .volvo-pricing-card__description {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.volvo-pricing-card dl {
+  margin-top: 28px;
+  border-top: 1px solid var(--volvo-line);
+}
+
+.volvo-pricing-card--highlighted dl {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.volvo-pricing-card dl > div {
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--volvo-line);
+}
+
+.volvo-pricing-card--highlighted dl > div {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.volvo-pricing-card dt {
+  color: var(--volvo-ink-soft);
+  font-family: var(--volvo-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.volvo-pricing-card dd {
+  color: var(--volvo-ink);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.volvo-pricing-card--highlighted dt {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.volvo-pricing-card--highlighted dd {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.volvo-pricing-card__action {
+  width: 100%;
+  margin-top: auto;
+  justify-content: center;
+}
+
+.volvo-pricing-card--highlighted .volvo-pricing-card__action {
+  border-color: #fff;
+  background: #fff;
+  color: var(--volvo-navy);
+}
+
+.volvo-pricing-addons {
+  border-top: 1px solid var(--volvo-ink);
+}
+
+.volvo-pricing-addons article {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 220px;
+  gap: 24px;
+  align-items: start;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--volvo-line);
+}
+
+.volvo-pricing-addons article > span {
+  color: var(--volvo-red);
+  font-family: var(--volvo-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.volvo-pricing-addons h3 {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+
+.volvo-pricing-addons p {
+  max-width: 620px;
+  margin-top: 8px;
+  color: var(--volvo-ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.volvo-pricing-addons strong {
+  color: var(--volvo-ink-soft);
+  font-family: var(--volvo-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.volvo-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--volvo-line);
+  background: var(--volvo-line);
+}
+
+.volvo-flow-grid article,
+.volvo-role-grid article {
+  min-height: 260px;
+  padding: 24px;
+  background: #fff;
+}
+
+.volvo-flow-grid span,
+.volvo-role-grid span {
+  color: var(--volvo-red);
+  font-family: var(--volvo-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+
+.volvo-flow-grid h3,
+.volvo-role-grid h3 {
+  margin-top: 54px;
+  font-size: 23px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+.volvo-flow-grid p,
+.volvo-role-grid p {
+  margin-top: 14px;
+  color: var(--volvo-ink-soft);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.volvo-role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--volvo-line);
+  background: var(--volvo-line);
+}
+
+.volvo-footer__support {
+  display: inline-flex;
+  margin-top: 28px;
+  border-bottom: 1px solid var(--volvo-ink);
+  padding-bottom: 5px;
+  color: var(--volvo-ink);
+  font-family: var(--volvo-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Legacy marketing routes inherit the same geometry instead of old SaaS chrome. */
+.page-motion [class*="rounded-"],
+.page-motion [class*="shadow-"] {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.page-motion .hero-panel > .pointer-events-none {
+  display: none;
+}
+
+.volvo-page [class*="rounded-"],
+.volvo-page [class*="shadow-"] {
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .scroll-reveal[data-visible="true"] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .volvo-pricing-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .volvo-flow-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .volvo-pricing-grid,
+  .volvo-flow-grid,
+  .volvo-role-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .volvo-pricing-card {
+    min-height: 0;
+  }
+
+  .volvo-pricing-card__description {
+    min-height: 0;
+  }
+
+  .volvo-pricing-addons article {
+    grid-template-columns: 42px minmax(0, 1fr);
+  }
+
+  .volvo-pricing-addons strong {
+    grid-column: 2;
+  }
+
+  .volvo-flow-grid article,
+  .volvo-role-grid article {
+    min-height: 0;
+  }
+}

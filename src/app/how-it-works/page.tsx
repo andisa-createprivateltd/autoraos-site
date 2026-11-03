@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { EditorialHero } from "@/components/marketing/editorial-hero";
+import { ScrollReveal } from "@/components/marketing/scroll-reveal";
 import { ButtonLink } from "@/components/ui/button-link";
 import { buildPageMetadata } from "@/lib/site-metadata";
 
@@ -10,82 +12,78 @@ export const metadata: Metadata = buildPageMetadata({
 });
 
 const workflow = [
-  {
-    step: "01",
-    title: "Connect your lead sources",
-    detail: "Website forms, Meta, Google, OEM feeds, and WhatsApp Cloud API feed one governed operating queue."
-  },
-  {
-    step: "02",
-    title: "Centralize conversations",
-    detail: "All enquiries appear in one shared inbox so sales and BDC teams work from one version of the truth."
-  },
-  {
-    step: "03",
-    title: "Prioritize urgency",
-    detail: "SLA timers and risk scoring determine what must happen next, by who, and how quickly."
-  },
-  {
-    step: "04",
-    title: "Execute bookings",
-    detail: "Confirm, reschedule, remind, and close opportunities with a full audit trail instead of scattered follow-up."
-  },
-  {
-    step: "05",
-    title: "Measure impact",
-    detail: "Revenue at risk, breach trends, and executive reporting show where response discipline is protecting revenue and where it is not."
-  }
+  ["01", "Connect your lead sources", "Website forms, Meta, Google, OEM feeds, and WhatsApp Cloud API feed one governed operating queue."],
+  ["02", "Centralize conversations", "All enquiries appear in one shared inbox so sales and BDC teams work from one version of the truth."],
+  ["03", "Prioritize urgency", "SLA timers and risk scoring determine what must happen next, by who, and how quickly."],
+  ["04", "Execute bookings", "Confirm, reschedule, remind, and close opportunities with a full audit trail instead of scattered follow-up."],
+  ["05", "Measure impact", "Revenue at risk, breach trends, and executive reporting show where response discipline is protecting revenue and where it is not."]
+] as const;
+
+const roles = [
+  ["Sales and BDC", "See assigned enquiries, next actions, and countdown pressure in one shared queue."],
+  ["Managers", "Track handoffs, hot leads not booked, and breaches before revenue leakage compounds."],
+  ["Leadership", "Measure store discipline, booking execution, and risk concentration with clear accountability."]
 ] as const;
 
 export default function HowItWorksPage() {
   return (
-    <div className="page-motion space-y-10">
-      <section className="hero-panel relative overflow-hidden p-8 md:p-10">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,rgba(255,255,255,0.15),transparent_45%),linear-gradient(112deg,#0b0c0d_0%,#111316_56%,#161a1f_100%)]" />
-        <div className="relative z-10 max-w-3xl">
-          <p className="section-kicker">How It Works</p>
-          <h1 className="section-heading mt-4 text-balance text-4xl font-semibold md:text-5xl">
-            One governed flow from enquiry to booking outcome
-          </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/82">
-            AUTORA OS turns response discipline into a measurable operating loop instead of leaving lead handling to disconnected systems and memory.
-          </p>
+    <div className="volvo-page">
+      <EditorialHero
+        eyebrow="Operating model / enquiry to outcome"
+        title={<>One governed flow from enquiry<br /><em>to booking outcome.</em></>}
+        intro="AUTORA OS turns response discipline into a measurable operating loop instead of leaving lead handling to disconnected systems and memory."
+        detail="The system follows the opportunity through capture, ownership, escalation, booking, confirmation, and review. Each transition has a visible owner."
+        actions={
+          <>
+            <ButtonLink href="/platform" eventName="cta_view_platform_click" eventParams={{ location: "how_it_works" }}>View operations</ButtonLink>
+            <ButtonLink href="/request-audit" variant="ghost" eventName="cta_request_audit_click" eventParams={{ location: "how_it_works" }}>Request revenue audit</ButtonLink>
+          </>
+        }
+      />
+
+      <section className="volvo-section volvo-section--paper">
+        <div className="volvo-container">
+          <div className="volvo-section-heading">
+            <div>
+              <p className="volvo-overline">01 / The operating loop</p>
+              <h2>Execution is governed at every handoff.</h2>
+            </div>
+            <p className="volvo-copy">
+              The operating model is deliberately simple: capture the demand, assign the next action, enforce the response window, and carry the booking through to attendance.
+            </p>
+          </div>
+          <ScrollReveal className="volvo-flow-grid">
+            {workflow.map(([step, title, detail]) => (
+              <article key={step}>
+                <span>{step}</span>
+                <h3>{title}</h3>
+                <p>{detail}</p>
+              </article>
+            ))}
+          </ScrollReveal>
         </div>
       </section>
 
-      <section className="stagger-grid grid gap-4 md:grid-cols-2 xl:grid-cols-5">
-        {workflow.map((item) => (
-          <article key={item.step} className="surface-card p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-steel">{item.step}</p>
-            <h2 className="section-heading mt-2 text-xl font-semibold text-coal">{item.title}</h2>
-            <p className="mt-3 text-sm leading-relaxed text-steel">{item.detail}</p>
-          </article>
-        ))}
-      </section>
-
-      <section className="page-shell p-6">
-        <h2 className="section-heading text-2xl font-semibold text-coal">Who works inside the flow</h2>
-        <div className="mt-4 grid gap-3 md:grid-cols-3">
-          <div className="rounded-xl border border-steel/14 bg-white p-4">
-            <p className="text-sm font-semibold text-coal">Sales and BDC</p>
-            <p className="mt-2 text-sm text-steel">See assigned enquiries, next actions, and countdown pressure in one shared queue.</p>
+      <section className="volvo-section volvo-section--white">
+        <div className="volvo-container">
+          <div className="volvo-section-heading">
+            <div>
+              <p className="volvo-overline">02 / Accountability</p>
+              <h2>Every role works inside the same control model.</h2>
+            </div>
+            <p className="volvo-copy">
+              AUTORA is designed around operational responsibility, not a generic user list. Each team sees the pressure it owns and the decision it needs to make next.
+            </p>
           </div>
-          <div className="rounded-xl border border-steel/14 bg-white p-4">
-            <p className="text-sm font-semibold text-coal">Managers</p>
-            <p className="mt-2 text-sm text-steel">Track handoffs, hot leads not booked, and breaches before revenue leakage compounds.</p>
-          </div>
-          <div className="rounded-xl border border-steel/14 bg-white p-4">
-            <p className="text-sm font-semibold text-coal">Leadership</p>
-            <p className="mt-2 text-sm text-steel">Measure store discipline, booking execution, and risk concentration with clear accountability.</p>
-          </div>
-        </div>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <ButtonLink href="/platform" eventName="cta_view_platform_click" eventParams={{ location: "how_it_works" }}>
-            See Platform
-          </ButtonLink>
-          <ButtonLink href="/request-audit" variant="ghost" eventName="cta_request_audit_click" eventParams={{ location: "how_it_works" }}>
-            Request Revenue Audit
-          </ButtonLink>
+          <ScrollReveal className="volvo-role-grid">
+            {roles.map(([title, detail], index) => (
+              <article key={title}>
+                <span>0{index + 1}</span>
+                <h3>{title}</h3>
+                <p>{detail}</p>
+              </article>
+            ))}
+          </ScrollReveal>
         </div>
       </section>
     </div>

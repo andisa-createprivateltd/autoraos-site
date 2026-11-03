@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { AutoraLogo } from "@/components/autora-logo";
+import { AUTORA_WHATSAPP } from "@/lib/constants";
 
 const columns = [
   {
@@ -41,6 +42,14 @@ export function SiteFooter() {
             Operational command infrastructure for dealership networks. Govern urgency, booking execution, auditability,
             and revenue accountability across every store in the group.
           </p>
+          <a
+            className="volvo-footer__support"
+            href={`https://wa.me/${AUTORA_WHATSAPP}?text=Hi%20AUTORA%2C%20I%20need%20help%20with%20revenue%20governance%20rollout.`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Contact operations support
+          </a>
         </div>
         <div className="volvo-footer__columns">
           {columns.map((column) => (

@@ -1,4 +1,6 @@
+import Link from "next/link";
 import { LiveSystemPanel, OperationalSurfaceCard } from "@/components/marketing/operational-surfaces";
+import { ScrollReveal } from "@/components/marketing/scroll-reveal";
 import { ButtonLink } from "@/components/ui/button-link";
 
 const controlLayers = [
@@ -6,24 +8,28 @@ const controlLayers = [
     index: "01",
     title: "Intake",
     detail: "Every enquiry is captured across WhatsApp, web, OEM feeds, and paid demand before it disappears in handoff.",
+    href: "/platform#inbox",
     image: "https://images.unsplash.com/photo-1551830820-330a71b99659?auto=format&fit=crop&w=1400&q=82"
   },
   {
     index: "02",
     title: "Enforcement",
     detail: "Every lead is assigned, timed, and escalated when the required response window is missed.",
+    href: "/platform#dashboard",
     image: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=1400&q=82"
   },
   {
     index: "03",
     title: "Execution",
     detail: "Bookings are created, confirmed, and followed through to arrival instead of being left as activity in a CRM.",
+    href: "/platform#leads-bookings",
     image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1400&q=82"
   },
   {
     index: "04",
     title: "Visibility",
     detail: "Leadership sees where response discipline breaks, where revenue is exposed, and where intervention is required.",
+    href: "/platform#insights",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1400&q=82"
   }
 ] as const;
@@ -45,9 +51,9 @@ const outcomes = [
 ] as const;
 
 const operatingNotes = [
-  ["Control note 01", "Response is a governed event", "A lead is not safely handled because it was seen. Ownership, timing, and the next action have to be explicit."],
-  ["Control note 02", "A booking is not complete until confirmed", "Execution continues after contact. Confirmation, reminders, and attendance are part of the revenue path."],
-  ["Control note 03", "Every override needs a trace", "Network leadership can only improve the operating model when exceptions remain visible and attributable."]
+  ["Control note 01", "Response is a governed event", "A lead is not safely handled because it was seen. Ownership, timing, and the next action have to be explicit.", "/how-it-works"],
+  ["Control note 02", "A booking is not complete until confirmed", "Execution continues after contact. Confirmation, reminders, and attendance are part of the revenue path.", "/platform#leads-bookings"],
+  ["Control note 03", "Every override needs a trace", "Network leadership can only improve the operating model when exceptions remain visible and attributable.", "/security"]
 ] as const;
 
 export async function HomeAudiV2() {
@@ -89,11 +95,11 @@ export async function HomeAudiV2() {
             />
             <div className="volvo-hero__visual-caption">
               <span>Live operational environment</span>
-              <span>Network state / 03 Nov 2026</span>
+              <span>Network state / representative readout</span>
             </div>
             <div className="volvo-hero__system">
               <LiveSystemPanel
-                eyebrow="Live system panel"
+                eyebrow="Operational readout"
                 title="Operational status"
                 metrics={[
                   { label: "Revenue at Risk", value: "R 412k", status: "Action Required", tone: "warning" },
@@ -101,7 +107,7 @@ export async function HomeAudiV2() {
                   { label: "Urgent Leads Pending", value: "27 leads", status: "Action Required", tone: "warning" },
                   { label: "Execution Required", value: "14 bookings", status: "Non-Compliant", tone: "risk" }
                 ]}
-                footer="Leadership sees the break while opportunities are still recoverable."
+                footer="Representative control state. Connect deployment data for live network values."
               />
             </div>
           </div>
@@ -142,10 +148,10 @@ export async function HomeAudiV2() {
               a lost customer or an unexplainable revenue variance.
             </p>
           </div>
-          <div className="volvo-teaser-grid">
+          <ScrollReveal className="volvo-teaser-grid">
             {controlLayers.map((layer) => (
-              <article key={layer.index} className="volvo-teaser">
-                <img src={layer.image} alt="" width="1400" height="900" loading="lazy" />
+              <Link key={layer.index} href={layer.href} className="volvo-teaser">
+                <img src={layer.image} alt={`${layer.title} control layer`} width="1400" height="900" loading="lazy" />
                 <div className="volvo-teaser__shade" />
                 <div className="volvo-teaser__content">
                   <span>{layer.index}</span>
@@ -153,9 +159,9 @@ export async function HomeAudiV2() {
                   <p>{layer.detail}</p>
                   <span className="volvo-arrow-link">Read the control layer</span>
                 </div>
-              </article>
+              </Link>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -171,7 +177,7 @@ export async function HomeAudiV2() {
               layer. No demo state.
             </p>
           </div>
-          <div className="volvo-surface-grid">
+          <ScrollReveal className="volvo-surface-grid">
             <OperationalSurfaceCard
               eyebrow="Urgency queue"
               title="Timed queue control"
@@ -205,7 +211,7 @@ export async function HomeAudiV2() {
               ]}
               footer="Execution continues after the lead is answered."
             />
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -241,7 +247,7 @@ export async function HomeAudiV2() {
               as modeled. The commercial effect remains tied to governed execution.
             </p>
           </div>
-          <div className="volvo-outcome-grid">
+          <ScrollReveal className="volvo-outcome-grid">
             {outcomes.map(([value, label, note]) => (
               <article key={label}>
                 <strong>{value}</strong>
@@ -249,7 +255,7 @@ export async function HomeAudiV2() {
                 <p>{note}</p>
               </article>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
@@ -264,16 +270,16 @@ export async function HomeAudiV2() {
               See how it works
             </ButtonLink>
           </div>
-          <div className="volvo-news__list">
-            {operatingNotes.map(([index, title, detail]) => (
+          <ScrollReveal className="volvo-news__list">
+            {operatingNotes.map(([index, title, detail, href]) => (
               <article key={index}>
                 <span>{index}</span>
                 <h3>{title}</h3>
                 <p>{detail}</p>
-                <span className="volvo-arrow-link volvo-arrow-link--dark">Read note</span>
+                <Link href={href} className="volvo-arrow-link volvo-arrow-link--dark">Read note</Link>
               </article>
             ))}
-          </div>
+          </ScrollReveal>
         </div>
       </section>
 
